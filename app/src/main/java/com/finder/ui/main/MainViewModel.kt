@@ -29,8 +29,8 @@ class MainViewModel : ViewModel() {
     // This method should be called on App Launch based on current location
     // TODO - need to pass in lat/long
     fun getSuggestionsBasedOnLocation(
-        lat: Float? = null,
-        long: Float? = null
+        lat: Double? = null,
+        long: Double? = null
     ) {
         println("JORDAN - getting suggestions")
         state.onNext(SuggestionState.Loading)

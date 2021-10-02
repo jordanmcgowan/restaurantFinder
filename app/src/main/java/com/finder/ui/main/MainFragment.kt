@@ -1,6 +1,7 @@
 package com.finder.ui.main
 
 import android.os.Bundle
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,20 +9,33 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.finder.R
 import com.finder.databinding.MainFragmentBinding
-import com.finder.networking.Suggestion
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+
+private const val LAT_PARAM = "lat_bundle_param"
+private const val LONG_PARAM = "long_bundle_param"
+
 
 class MainFragment : Fragment() {
 
     companion object {
-        fun newInstance() = MainFragment()
+        fun newInstance(
+            lat: Double,
+            long: Double
+        ) : MainFragment {
+            return MainFragment().apply {
+                arguments = Bundle().apply {
+                    putDouble(LAT_PARAM, lat)
+                    putDouble(LONG_PARAM, long)
+                }
+            }
+        }
     }
 
     private lateinit var binding: MainFragmentBinding
-
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -31,7 +45,7 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = MainFragmentBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -54,7 +68,10 @@ class MainFragment : Fragment() {
         )
 
         // Get base suggestions
-        viewModel.getSuggestionsBasedOnLocation()
+        viewModel.getSuggestionsBasedOnLocation(
+            lat = arguments?.getDouble(LAT_PARAM),
+            long = arguments?.getDouble(LONG_PARAM)
+        )
 
     }
 
