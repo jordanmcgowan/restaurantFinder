@@ -10,17 +10,26 @@ class PlacesManager internal constructor(
 
 
     fun fetchGeneralRestaurantSuggestions(
-        lat: Float?,
-        long: Float?
+        lat: Double?,
+        long: Double?
     ): Observable<List<Suggestion>> {
         return Observable.create { subscriber ->
-            val response = placesApi.fetchRestaurantSuggestionsBasedOnLocation().execute()
+            // Query requires a comma sep lat, long. We can construct that here
+            val locationString = "${lat},${long}"
+
+            val response =
+                placesApi.fetchRestaurantSuggestionsBasedOnLocation(location = locationString)
+                    .execute()
 
             if (response.isSuccessful) {
-                // Handle empty list?
-                val suggestions = response.body()?.results?.map {
+                // TODO - Handle empty list?
+                // Suggestions without names will be filtered out since they won't be meaningful
+                // to the user
+                val suggestions = response.body()?.results?.filter { it.name != null }?.map {
                     Suggestion(
-                        name = it.name
+                        name = it.name!!,
+                        address = it.formattedAddress,
+                        rating = it.rating
                     )
                 } ?: emptyList()
 
@@ -38,5 +47,7 @@ class PlacesManager internal constructor(
 
 // TODO - flush this out more
 data class Suggestion(
-    val name: String
+    val name: String,
+    val address: String?,
+    val rating: Float?
 )
