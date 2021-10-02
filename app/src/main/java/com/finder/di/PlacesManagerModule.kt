@@ -1,19 +1,15 @@
 package com.finder.di
 
-import androidx.core.net.ConnectivityManagerCompat
 import com.finder.BuildConfig
 import com.finder.networking.PlacesApi
 import com.finder.networking.PlacesManager
 import dagger.Module
 import dagger.Provides
-import dagger.Reusable
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -48,7 +44,7 @@ class PlacesManagerModule {
     @Singleton
     fun getHttpLoggingInterceptor(): HttpLoggingInterceptor {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
-        httpLoggingInterceptor.level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+        httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
         return httpLoggingInterceptor
     }
 

@@ -17,10 +17,14 @@ class PlacesManager internal constructor(
             val response = placesApi.fetchRestaurantSuggestionsBasedOnLocation().execute()
 
             if (response.isSuccessful) {
-                // Handle empty list?
-                val suggestions = response.body()?.results?.map {
+                // TODO - Handle empty list?
+                // Suggestions without names will be filtered out since they won't be meaningful
+                // to the user
+                val suggestions = response.body()?.results?.filter { it.name != null }?.map {
                     Suggestion(
-                        name = it.name
+                        name = it.name!!,
+                        address = it.formattedAddress,
+                        rating = it.rating
                     )
                 } ?: emptyList()
 
@@ -38,5 +42,7 @@ class PlacesManager internal constructor(
 
 // TODO - flush this out more
 data class Suggestion(
-    val name: String
+    val name: String,
+    val address: String?,
+    val rating: Float?
 )

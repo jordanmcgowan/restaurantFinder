@@ -10,11 +10,11 @@ data class RestaurantSuggestionResponse(
 
 @JsonClass(generateAdapter = true)
 data class RestaurantResultResponse(
-    @Json(name = "formatted_address") val formattedAddress: String,
-    @Json(name = "name") val name: String,
-    @Json(name = "rating") val rating: Float,
-    @Json(name = "opening_hours") val hours: RestaurantOpeningHours,
-    @Json(name = "geometry") val geometry: RestaurantGeometryResponse
+    @Json(name = "vicinity") val formattedAddress: String? = null,
+    @Json(name = "geometry") val geometry: RestaurantGeometryResponse? = null,
+    @Json(name = "name") val name: String? = null,
+    @Json(name = "opening_hours") val hours: RestaurantOpeningHours? = null,
+    @Json(name = "rating") val rating: Float? = null
 )
 
 @JsonClass(generateAdapter = true)

@@ -32,6 +32,7 @@ class MainViewModel : ViewModel() {
         lat: Float? = null,
         long: Float? = null
     ) {
+        println("JORDAN - getting suggestions")
         state.onNext(SuggestionState.Loading)
 
         compositeDisposable.add(
@@ -40,7 +41,7 @@ class MainViewModel : ViewModel() {
                 long = long
             ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe() {
+                .subscribe {
                     if (it.isNotEmpty()) {
                         state.onNext(SuggestionState.Content(it))
                     } else {
