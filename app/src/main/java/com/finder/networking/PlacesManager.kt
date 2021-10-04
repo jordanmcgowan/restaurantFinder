@@ -11,15 +11,19 @@ class PlacesManager internal constructor(
 
     fun fetchGeneralRestaurantSuggestions(
         lat: Double?,
-        long: Double?
+        long: Double?,
+        // Only will be used when coming from the Search flow, not for base suggestions
+        keyword: String?
     ): Observable<List<Suggestion>> {
         return Observable.create { subscriber ->
             // Query requires a comma sep lat, long. We can construct that here
             val locationString = "${lat},${long}"
 
             val response =
-                placesApi.fetchRestaurantSuggestionsBasedOnLocation(location = locationString)
-                    .execute()
+                placesApi.fetchRestaurantSuggestionsBasedOnLocation(
+                    location = locationString,
+                    keyword = keyword
+                ).execute()
 
             if (response.isSuccessful) {
                 // TODO - Handle empty list?
@@ -29,7 +33,13 @@ class PlacesManager internal constructor(
                     Suggestion(
                         name = it.name!!,
                         address = it.formattedAddress,
-                        rating = it.rating
+                        rating = it.rating,
+                        // Trust the first image is the best -- the API doesn't provide a better
+                        // option
+                        imageReference = it.photos?.get(0)?.reference,
+                        ratingCount = it.ratingCount,
+                        priceLevel = it.priceLevel,
+                        placeId = it.placeId
                     )
                 } ?: emptyList()
 
@@ -43,11 +53,55 @@ class PlacesManager internal constructor(
 
         }
     }
+
+    fun fetchSuggestionDetails(
+        suggestionId: String
+    ): Observable<Suggestion> {
+        return Observable.create { subscriber ->
+
+            val response =
+                placesApi.fetchRestaurantSuggestionDetails(suggestionId = suggestionId)
+                    .execute()
+
+            if (response.isSuccessful) {
+                val suggestion = response.body()?.result?.let {
+                    Suggestion(
+                        name = it.name!!,
+                        address = it.formattedAddress,
+                        rating = it.rating,
+                        // Trust the first image is the best -- the API doesn't provide a better
+                        // option
+                        imageReference = it.photos?.get(0)?.reference,
+                        ratingCount = it.ratingCount,
+                        priceLevel = it.priceLevel,
+                        placeId = it.placeId,
+                        lat = it.geometry?.location?.latitude,
+                        long = it.geometry?.location?.longitude
+                    )
+                }
+
+                subscriber.onNext(suggestion)
+                // TODO - necessary?
+                subscriber.onComplete()
+
+            } else {
+                subscriber.onError(Throwable(response.message()))
+            }
+
+        }
+    }
 }
 
-// TODO - flush this out more
 data class Suggestion(
     val name: String,
+    val imageReference: String?,
     val address: String?,
-    val rating: Float?
+    val rating: Float?,
+    val ratingCount: Int?,
+    val priceLevel: Int?,
+    val placeId: String?,
+    // We'll give these a default as they're unused in the Suggestion List context, only with
+    // Details
+    val lat: Float? = null,
+    val long: Float? = null
 )

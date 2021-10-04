@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.finder.R
 import com.finder.databinding.SuggestionItemBinding
 import com.finder.networking.Suggestion
 
@@ -41,8 +43,29 @@ class SuggestionViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(suggestion: Suggestion) {
-        // TODO - flush out views
         binding.name.text = suggestion.name
+        Glide
+            .with(binding.root.context)
+            .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${suggestion.imageReference}&key=AIzaSyDQSd210wKX_7cz9MELkxhaEOUhFP0AkSk")
+            .into(binding.image)
+        val priceLevelText = when (suggestion.priceLevel) {
+            1 -> "$"
+            2 -> "$$"
+            3 -> "$$$"
+            4 -> "$$$$"
+            // Best option here is just a null string -- show nothing
+            else -> null
+        }
+
+        priceLevelText?.let {
+            binding.priceLevel.apply {
+                text = it
+                isVisible = true
+            }
+            // Only show the divider when we have a priceLevel!
+            binding.priceDivider.isVisible = true
+        }
+
         binding.address.text = suggestion.address
         // Only show the rating view if the value is present
         binding.rating.apply {
@@ -51,6 +74,8 @@ class SuggestionViewHolder(
                 isVisible = true
             }
         }
+        binding.ratingCount.text = binding.root.context.getString(R.string.rating_count_label, suggestion.ratingCount)
+
         binding.root.setOnClickListener {
             actionHandler(SuggestionAction.SeeSuggestionDetails(suggestion))
         }

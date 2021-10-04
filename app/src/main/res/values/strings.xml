@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">finder</string>
+    <string name="app_name">baglessLunch</string>
+
+    <!-- Used for Suggestion Adapter -->
+    <string name="price_label_divider">|</string>
+    <string name="rating_count_label">(%d)</string>
+
+    <!-- Used for Main Fragment -->
+    <string name="search_hint">Search for a restaurant</string>
+    <string name="header_title">AllTrails at Lunch</string>
 </resources>

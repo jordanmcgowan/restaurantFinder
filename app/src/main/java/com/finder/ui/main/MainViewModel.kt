@@ -27,18 +27,20 @@ class MainViewModel : ViewModel() {
     fun state(): Observable<SuggestionState> = state.hide()
 
     // This method should be called on App Launch based on current location
-    // TODO - need to pass in lat/long
     fun getSuggestionsBasedOnLocation(
         lat: Double? = null,
-        long: Double? = null
+        long: Double? = null,
+        // This wil be present when the user has entered a search term. It will be null on app
+        // launch when we get the base suggestions
+        keyword: String? = null
     ) {
-        println("JORDAN - getting suggestions")
         state.onNext(SuggestionState.Loading)
 
         compositeDisposable.add(
             placesManager.fetchGeneralRestaurantSuggestions(
                 lat = lat,
-                long = long
+                long = long,
+                keyword = keyword
             ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
