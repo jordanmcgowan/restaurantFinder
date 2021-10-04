@@ -10,4 +10,11 @@ interface PlacesApi {
         @Query("keyword") keyword: String? = null,
         @Query("location") location: String? = null
     ): Call<RestaurantSuggestionResponse>
+
+    @GET("details/json?key=AIzaSyDQSd210wKX_7cz9MELkxhaEOUhFP0AkSk")
+    fun fetchRestaurantSuggestionDetails(
+        @Query("place_id") suggestionId: String? = null
+    ): Call<RestaurantSuggestionDetailResponse>
+
+
 }

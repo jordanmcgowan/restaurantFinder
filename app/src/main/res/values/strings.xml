@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">finder</string>
+    <string name="app_name">AllTrails at Lunch</string>
+    <string name="price_label_divider">|</string>
+    <string name="rating_count_label">(%d)</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.finder.ui.main
 
 import android.os.Bundle
-import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +8,10 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.finder.R
+import com.finder.databinding.DetailFragmentBinding
 import com.finder.databinding.MainFragmentBinding
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.finder.ui.detail.DetailFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
@@ -25,7 +25,7 @@ class MainFragment : Fragment() {
         fun newInstance(
             lat: Double,
             long: Double
-        ) : MainFragment {
+        ): MainFragment {
             return MainFragment().apply {
                 arguments = Bundle().apply {
                     putDouble(LAT_PARAM, lat)
@@ -59,7 +59,7 @@ class MainFragment : Fragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
-                     render(it)
+                        render(it)
                     },
                     {
                         println("ERROR! ${it.localizedMessage}")
@@ -78,10 +78,10 @@ class MainFragment : Fragment() {
     private fun render(state: SuggestionState) {
         when (state) {
             is SuggestionState.Loading -> {
-                // TODO - Loading spinner
+                binding.progressBar.isVisible = true
             }
             is SuggestionState.Content -> {
-                // TODO - setup adapter and show stuff
+                binding.progressBar.isVisible = false
                 binding.suggestionList.apply {
                     val suggestionAdapter = SuggestionAdapter(
                         actionHandler = ::handleAction
@@ -89,6 +89,7 @@ class MainFragment : Fragment() {
                     suggestionAdapter.setSuggestions(state.suggestionList)
                     adapter = suggestionAdapter
                     layoutManager = LinearLayoutManager(context)
+                    // TODO - spacing divider?
                     isVisible = true
                 }
             }
@@ -102,10 +103,20 @@ class MainFragment : Fragment() {
     }
 
 
-    private fun handleAction(action: SuggestionAction){
+    private fun handleAction(action: SuggestionAction) {
         when (action) {
             is SuggestionAction.SeeSuggestionDetails -> {
-                // TODO - navigate to next fragment
+                parentFragmentManager.beginTransaction()
+                    .replace(
+                        // Not super happy with this, but it's enough to get the new Fragment to
+                        // open. Ideally we could use this binding's root - for some reason
+                        // `binding.root.id` wasn't working for me, but this did
+                        ((view as ViewGroup).parent as View).id,
+                        DetailFragment.newInstance(suggestion = action.suggestion),
+                        DetailFragment.TAG
+                    )
+                    .addToBackStack(null)
+                    .commit()
             }
         }
     }

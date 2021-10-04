@@ -89,6 +89,7 @@ class MainActivity : AppCompatActivity() {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                     Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show()
+                    // TODO - use the app with a random location?
 
                     // Check if we are in a state where the user has denied the permission and
                     // selected Don't ask again

@@ -29,7 +29,13 @@ class PlacesManager internal constructor(
                     Suggestion(
                         name = it.name!!,
                         address = it.formattedAddress,
-                        rating = it.rating
+                        rating = it.rating,
+                        // Trust the first image is the best -- the API doesn't provide a better
+                        // option
+                        imageReference = it.photos?.get(0)?.reference,
+                        ratingCount = it.ratingCount,
+                        priceLevel = it.priceLevel,
+                        placeId = it.placeId
                     )
                 } ?: emptyList()
 
@@ -43,11 +49,49 @@ class PlacesManager internal constructor(
 
         }
     }
+
+    fun fetchSuggestionDetails(
+        suggestionId: String
+    ): Observable<Suggestion> {
+        return Observable.create { subscriber ->
+
+            val response =
+                placesApi.fetchRestaurantSuggestionDetails(suggestionId = suggestionId)
+                    .execute()
+
+            if (response.isSuccessful) {
+                val suggestion = response.body()?.result?.let {
+                    Suggestion(
+                        name = it.name!!,
+                        address = it.formattedAddress,
+                        rating = it.rating,
+                        // Trust the first image is the best -- the API doesn't provide a better
+                        // option
+                        imageReference = it.photos?.get(0)?.reference,
+                        ratingCount = it.ratingCount,
+                        priceLevel = it.priceLevel,
+                        placeId = it.placeId
+                    )
+                }
+
+                subscriber.onNext(suggestion)
+                // TODO - necessary?
+                subscriber.onComplete()
+
+            } else {
+                subscriber.onError(Throwable(response.message()))
+            }
+
+        }
+    }
 }
 
-// TODO - flush this out more
 data class Suggestion(
     val name: String,
+    val imageReference: String?,
     val address: String?,
-    val rating: Float?
+    val rating: Float?,
+    val ratingCount: Int?,
+    val priceLevel: Int?,
+    val placeId: String?
 )

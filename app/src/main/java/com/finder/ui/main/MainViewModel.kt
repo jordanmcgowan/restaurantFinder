@@ -27,12 +27,10 @@ class MainViewModel : ViewModel() {
     fun state(): Observable<SuggestionState> = state.hide()
 
     // This method should be called on App Launch based on current location
-    // TODO - need to pass in lat/long
     fun getSuggestionsBasedOnLocation(
         lat: Double? = null,
         long: Double? = null
     ) {
-        println("JORDAN - getting suggestions")
         state.onNext(SuggestionState.Loading)
 
         compositeDisposable.add(
