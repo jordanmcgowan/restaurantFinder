@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.finder.R
-import com.finder.databinding.DetailFragmentBinding
 import com.finder.databinding.MainFragmentBinding
 import com.finder.ui.detail.DetailFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 
 private const val LAT_PARAM = "lat_bundle_param"
 private const val LONG_PARAM = "long_bundle_param"
@@ -52,7 +52,23 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        println("JORDAN - onViewCreated")
+
+        val lat = arguments?.getDouble(LAT_PARAM)
+        val long = arguments?.getDouble(LONG_PARAM)
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(p0: String?): Boolean {
+                // Do nothing -- we will only handle the submit button taps. We could implement this
+                // if we wanted to handle search suggestions/typeahead/autofill
+                return false
+            }
+
+            override fun onQueryTextSubmit(keyword: String?): Boolean {
+                viewModel.getSuggestionsBasedOnLocation(lat = lat, long = long, keyword = keyword)
+                return true
+            }
+        })
+
 
         compositeDisposable.add(
             viewModel.state()
@@ -62,26 +78,32 @@ class MainFragment : Fragment() {
                         render(it)
                     },
                     {
+                        // TODO (with more time) - log this to BugSnag and alert on it
                         println("ERROR! ${it.localizedMessage}")
                     }
                 )
         )
 
         // Get base suggestions
-        viewModel.getSuggestionsBasedOnLocation(
-            lat = arguments?.getDouble(LAT_PARAM),
-            long = arguments?.getDouble(LONG_PARAM)
-        )
+        viewModel.getSuggestionsBasedOnLocation(lat = lat, long = long)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Hide the default action bar as it doesn't fit designs
+        (activity as AppCompatActivity?)?.supportActionBar?.hide()
     }
 
     private fun render(state: SuggestionState) {
         when (state) {
             is SuggestionState.Loading -> {
+                binding.viewFlipper.displayedChild(binding.contentContainer)
                 binding.progressBar.isVisible = true
             }
             is SuggestionState.Content -> {
                 binding.progressBar.isVisible = false
+                binding.searchLayout.isVisible = true
                 binding.suggestionList.apply {
                     val suggestionAdapter = SuggestionAdapter(
                         actionHandler = ::handleAction
@@ -89,15 +111,21 @@ class MainFragment : Fragment() {
                     suggestionAdapter.setSuggestions(state.suggestionList)
                     adapter = suggestionAdapter
                     layoutManager = LinearLayoutManager(context)
-                    // TODO - spacing divider?
                     isVisible = true
                 }
             }
             is SuggestionState.Empty -> {
-                // TODO - view flipper for empty state?
+                binding.progressBar.isVisible = false
+                // We want to be able to search when no results are found -- otherwise this is a
+                // dead end
+                binding.searchLayout.isVisible = true
+                // TODO - no results view
             }
             is SuggestionState.Error -> {
-                // TODO - flush out -- not possible rn
+                // TODO - show more in this...
+                // We want to be able to search when a search fails -- otherwise this is a dead end
+                binding.searchLayout.isVisible = true
+                binding.viewFlipper.displayedChild(binding.errorState)
             }
         }
     }
@@ -121,4 +149,11 @@ class MainFragment : Fragment() {
         }
     }
 
+}
+
+infix fun ViewGroup.displayedChild(view: View?) {
+    for (index in 0 until childCount) {
+        val child = getChildAt(index)
+        child.isVisible = child === view
+    }
 }

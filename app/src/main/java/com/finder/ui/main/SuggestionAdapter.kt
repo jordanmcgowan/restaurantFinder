@@ -43,7 +43,6 @@ class SuggestionViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(suggestion: Suggestion) {
-        // TODO - flush out views
         binding.name.text = suggestion.name
         Glide
             .with(binding.root.context)

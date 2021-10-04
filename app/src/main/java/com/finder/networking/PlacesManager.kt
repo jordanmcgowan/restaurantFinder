@@ -11,15 +11,19 @@ class PlacesManager internal constructor(
 
     fun fetchGeneralRestaurantSuggestions(
         lat: Double?,
-        long: Double?
+        long: Double?,
+        // Only will be used when coming from the Search flow, not for base suggestions
+        keyword: String?
     ): Observable<List<Suggestion>> {
         return Observable.create { subscriber ->
             // Query requires a comma sep lat, long. We can construct that here
             val locationString = "${lat},${long}"
 
             val response =
-                placesApi.fetchRestaurantSuggestionsBasedOnLocation(location = locationString)
-                    .execute()
+                placesApi.fetchRestaurantSuggestionsBasedOnLocation(
+                    location = locationString,
+                    keyword = keyword
+                ).execute()
 
             if (response.isSuccessful) {
                 // TODO - Handle empty list?
@@ -70,7 +74,9 @@ class PlacesManager internal constructor(
                         imageReference = it.photos?.get(0)?.reference,
                         ratingCount = it.ratingCount,
                         priceLevel = it.priceLevel,
-                        placeId = it.placeId
+                        placeId = it.placeId,
+                        lat = it.geometry?.location?.latitude,
+                        long = it.geometry?.location?.longitude
                     )
                 }
 
@@ -93,5 +99,9 @@ data class Suggestion(
     val rating: Float?,
     val ratingCount: Int?,
     val priceLevel: Int?,
-    val placeId: String?
+    val placeId: String?,
+    // We'll give these a default as they're unused in the Suggestion List context, only with
+    // Details
+    val lat: Float? = null,
+    val long: Float? = null
 )
