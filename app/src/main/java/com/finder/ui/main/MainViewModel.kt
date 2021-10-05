@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.finder.MyApp
 import com.finder.networking.PlacesManager
 import com.finder.Suggestion
+import com.finder.SuggestionLite
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -81,10 +82,5 @@ sealed class SuggestionState {
 sealed class SuggestionAction {
     data class SeeSuggestionDetails(val suggestion: Suggestion): SuggestionAction()
     data class UpdateFavoriteState(val suggestion: Suggestion): SuggestionAction()
-}
-
-fun <T> List<T>.findAndTransform(predicate: (T) -> Boolean, transform: (T) -> T): List<T> {
-    return map {
-        if (predicate(it)) transform(it) else it
-    }
+    data class SeeSuggestionsOnMap(val suggestionList: List<SuggestionLite>) : SuggestionAction()
 }

@@ -1,19 +1,22 @@
 package com.finder.networking
 
+import com.finder.BuildConfig
 import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.Call
 
 interface PlacesApi {
-    @GET("nearbysearch/json?radius=5000&type=restaurant&key=AIzaSyDQSd210wKX_7cz9MELkxhaEOUhFP0AkSk")
+    @GET("nearbysearch/json?radius=5000&type=restaurant")
     fun fetchRestaurantSuggestionsBasedOnLocation(
         @Query("keyword") keyword: String? = null,
-        @Query("location") location: String? = null
+        @Query("location") location: String? = null,
+        @Query("key") key: String? = BuildConfig.apiKey
     ): Call<RestaurantSuggestionResponse>
 
-    @GET("details/json?key=AIzaSyDQSd210wKX_7cz9MELkxhaEOUhFP0AkSk")
+    @GET("details/json")
     fun fetchRestaurantSuggestionDetails(
-        @Query("place_id") suggestionId: String? = null
+        @Query("place_id") suggestionId: String? = null,
+        @Query("key") key: String? = BuildConfig.apiKey
     ): Call<RestaurantSuggestionDetailResponse>
 
 

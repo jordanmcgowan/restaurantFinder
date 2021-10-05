@@ -325,7 +325,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:$USER_HOME$/Library/Android/sdk/icons/material/materialicons/star/baseline_star_24.xml" />
+                                      <entry key="url" value="file:$USER_HOME$/Library/Android/sdk/icons/material/materialicons/map/baseline_map_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -335,7 +335,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="favorite_enabled" />
+                            <entry key="outputName" value="map_icon" />
                           </map>
                         </option>
                       </PersistentState>

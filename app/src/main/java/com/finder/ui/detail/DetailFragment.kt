@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,7 +14,6 @@ import com.bumptech.glide.Glide
 import com.finder.R
 import com.finder.databinding.DetailFragmentBinding
 import com.finder.Suggestion
-import com.finder.ui.main.SuggestionAction
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
@@ -78,23 +76,10 @@ class DetailFragment: Fragment() {
     private fun render(state: DetailState) {
         when (state) {
             is DetailState.Loading -> {
-                // TODO
-//                binding.progressBar.isVisible = true
+                binding.progressBar.isVisible = true
             }
             is DetailState.Content -> {
-
-                // The only thing the stored suggestion is used for is favorite status. We can
-                // simply use the LiveData to drive just that one UI attribute and allow all the
-                // other pieces of the flow to operate as we'd expect since we have all the data
-                // outside the LiveData scope.
-                // FUTURE IMPROVEMENT - If we have an entry in the DB, we could feasibly use that
-                // stored data to populate this UI. That would require a re-arch of this pattern,
-                // but would limit network calls and speed up the UI!
-                viewModel.getSuggestionFromPlaceId(placeId = state.suggestion.placeId).observe(viewLifecycleOwner, { suggestion ->
-                    // The fact this is a check box will handle updates, but not the initial state setting
-                    binding.favoriteIcon.isChecked = suggestion.isFavorite
-                })
-
+                binding.progressBar.isVisible = false
                 val suggestion = state.suggestion
                 binding.name.text = suggestion.name
                 Glide
@@ -132,7 +117,6 @@ class DetailFragment: Fragment() {
                     }
                 }
 
-
                 binding.address.text = suggestion.address
                 // Only show the rating view if the value is present
                 binding.rating.apply {
@@ -150,8 +134,24 @@ class DetailFragment: Fragment() {
                     viewModel.updateFavoriteState(suggestion = suggestion.copy(isFavorite = isFavorite))
                 }
 
+                // The only thing the stored suggestion is used for is favorite status. We can
+                // simply use the LiveData to drive just that one UI attribute and allow all the
+                // other pieces of the flow to operate as we'd expect since we have all the data
+                // outside the LiveData scope.
+                // FUTURE IMPROVEMENT - If we have an entry in the DB, we could feasibly use that
+                // stored data to populate this UI. That would require a re-arch of this pattern,
+                // but would limit network calls and speed up the UI!
+                viewModel.getSuggestionFromPlaceId(placeId = state.suggestion.placeId).observe(viewLifecycleOwner, { suggestion ->
+                    // The fact this is a check box will handle updates, but not the initial state setting
+                    // When there is not an entry in the DB for the given suggestion, null will be
+                    // returned within the LiveData...this is not good! We can safe guard against it
+                    // but it shouldn't be happening
+                    binding.favoriteIcon.isChecked = suggestion?.isFavorite ?: false
+                })
+
             }
             is DetailState.Error -> {
+                binding.progressBar.isVisible = false
                 // TODO - flush out -- not possible rn
             }
         }

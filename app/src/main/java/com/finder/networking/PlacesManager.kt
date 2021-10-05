@@ -4,6 +4,10 @@ import androidx.lifecycle.LiveData
 import com.finder.Suggestion
 import com.finder.storage.SuggestionRepository
 import io.reactivex.Observable
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import timber.log.Timber
 
 class PlacesManager internal constructor(
   private val placesApi: PlacesApi,
