@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.finder.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -28,6 +29,9 @@ public final class MainFragmentBinding implements ViewBinding {
 
   @NonNull
   public final ConstraintLayout errorState;
+
+  @NonNull
+  public final FloatingActionButton fab;
 
   @NonNull
   public final TextView headerTitle;
@@ -49,12 +53,14 @@ public final class MainFragmentBinding implements ViewBinding {
 
   private MainFragmentBinding(@NonNull ViewFlipper rootView,
       @NonNull ConstraintLayout contentContainer, @NonNull ConstraintLayout errorState,
-      @NonNull TextView headerTitle, @NonNull ProgressBar progressBar,
-      @NonNull ConstraintLayout searchLayout, @NonNull SearchView searchView,
-      @NonNull RecyclerView suggestionList, @NonNull ViewFlipper viewFlipper) {
+      @NonNull FloatingActionButton fab, @NonNull TextView headerTitle,
+      @NonNull ProgressBar progressBar, @NonNull ConstraintLayout searchLayout,
+      @NonNull SearchView searchView, @NonNull RecyclerView suggestionList,
+      @NonNull ViewFlipper viewFlipper) {
     this.rootView = rootView;
     this.contentContainer = contentContainer;
     this.errorState = errorState;
+    this.fab = fab;
     this.headerTitle = headerTitle;
     this.progressBar = progressBar;
     this.searchLayout = searchLayout;
@@ -102,6 +108,12 @@ public final class MainFragmentBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.fab;
+      FloatingActionButton fab = ViewBindings.findChildViewById(rootView, id);
+      if (fab == null) {
+        break missingId;
+      }
+
       id = R.id.header_title;
       TextView headerTitle = ViewBindings.findChildViewById(rootView, id);
       if (headerTitle == null) {
@@ -134,7 +146,7 @@ public final class MainFragmentBinding implements ViewBinding {
 
       ViewFlipper viewFlipper = (ViewFlipper) rootView;
 
-      return new MainFragmentBinding((ViewFlipper) rootView, contentContainer, errorState,
+      return new MainFragmentBinding((ViewFlipper) rootView, contentContainer, errorState, fab,
           headerTitle, progressBar, searchLayout, searchView, suggestionList, viewFlipper);
     }
     String missingId = rootView.getResources().getResourceName(id);

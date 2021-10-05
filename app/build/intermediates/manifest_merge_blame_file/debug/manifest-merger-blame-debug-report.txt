@@ -10,82 +10,124 @@
 9        android:targetSdkVersion="31" />
 9-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml
 10
-11    <uses-permission android:name="android.permission.INTERNET" />
-11-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:6:5-66
-11-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:6:22-64
-12    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-12-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:7:5-80
-12-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:7:22-78
-13    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-13-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:8:5-78
-13-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:8:22-76
-14    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-14-->[com.facebook.flipper:flipper:0.113.0] /Users/abbieanderson/.gradle/caches/transforms-3/a5c65bcbb47c5aa0a7db9e9902f93266/transformed/jetified-flipper-0.113.0/AndroidManifest.xml:16:5-76
-14-->[com.facebook.flipper:flipper:0.113.0] /Users/abbieanderson/.gradle/caches/transforms-3/a5c65bcbb47c5aa0a7db9e9902f93266/transformed/jetified-flipper-0.113.0/AndroidManifest.xml:16:22-73
-15
-16    <application
-16-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:10:5-27:19
-17        android:name="com.finder.MyApp"
-17-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:11:9-40
-18        android:allowBackup="true"
-18-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:12:9-35
-19        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-19-->[androidx.core:core:1.6.0] /Users/abbieanderson/.gradle/caches/transforms-3/348f6d52d990d4fb4fcc5abc17a1cdcd/transformed/core-1.6.0/AndroidManifest.xml:24:18-86
-20        android:debuggable="true"
-21        android:extractNativeLibs="false"
-22        android:icon="@mipmap/ic_launcher"
-22-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:13:9-43
-23        android:label="@string/app_name"
-23-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:14:9-41
-24        android:roundIcon="@mipmap/ic_launcher_round"
-24-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:15:9-54
-25        android:supportsRtl="true"
-25-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:16:9-35
-26        android:testOnly="true"
-27        android:theme="@style/Theme.Finder" >
-27-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:17:9-44
-28        <activity
-28-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:18:9-26:20
-29            android:name="com.finder.MainActivity"
-29-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:19:13-41
-30            android:exported="true" >
-30-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:20:13-36
-31            <intent-filter>
-31-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:21:13-25:29
-32                <action android:name="android.intent.action.MAIN" />
-32-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:22:17-69
-32-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:22:25-66
+11    <!--
+12         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+13         Google Maps Android API v2, but you must specify either coarse or fine
+14         location permissions for the "MyLocation" functionality.
+15    -->
+16    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+16-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:10:5-81
+16-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:10:22-78
+17    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+17-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:10:5-81
+17-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:10:22-78
+18    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+18-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:12:5-79
+18-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:12:22-76
+19    <uses-permission android:name="android.permission.INTERNET" />
+19-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:13:5-67
+19-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:13:22-64
+20    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+20-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:10:5-81
+20-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:10:22-78
+21    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- Include required permissions for Google Maps API to run. -->
+21-->[com.facebook.flipper:flipper:0.113.0] /Users/abbieanderson/.gradle/caches/transforms-3/cf6b7a5d8726f287c7284c172e1f877b/transformed/jetified-flipper-0.113.0/AndroidManifest.xml:16:5-76
+21-->[com.facebook.flipper:flipper:0.113.0] /Users/abbieanderson/.gradle/caches/transforms-3/cf6b7a5d8726f287c7284c172e1f877b/transformed/jetified-flipper-0.113.0/AndroidManifest.xml:16:22-73
+22    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+22-->[com.google.android.gms:play-services-maps:17.0.1] /Users/abbieanderson/.gradle/caches/transforms-3/9e5dc7d1a40a2a22b351276ca8ab5d31/transformed/jetified-play-services-maps-17.0.1/AndroidManifest.xml:23:5-79
+22-->[com.google.android.gms:play-services-maps:17.0.1] /Users/abbieanderson/.gradle/caches/transforms-3/9e5dc7d1a40a2a22b351276ca8ab5d31/transformed/jetified-play-services-maps-17.0.1/AndroidManifest.xml:23:22-76
+23
+24    <uses-feature
+24-->[com.google.android.gms:play-services-maps:17.0.1] /Users/abbieanderson/.gradle/caches/transforms-3/9e5dc7d1a40a2a22b351276ca8ab5d31/transformed/jetified-play-services-maps-17.0.1/AndroidManifest.xml:26:5-28:35
+25        android:glEsVersion="0x00020000"
+25-->[com.google.android.gms:play-services-maps:17.0.1] /Users/abbieanderson/.gradle/caches/transforms-3/9e5dc7d1a40a2a22b351276ca8ab5d31/transformed/jetified-play-services-maps-17.0.1/AndroidManifest.xml:27:9-41
+26        android:required="true" />
+26-->[com.google.android.gms:play-services-maps:17.0.1] /Users/abbieanderson/.gradle/caches/transforms-3/9e5dc7d1a40a2a22b351276ca8ab5d31/transformed/jetified-play-services-maps-17.0.1/AndroidManifest.xml:28:9-32
+27
+28    <queries>
+28-->[com.google.android.gms:play-services-maps:17.0.1] /Users/abbieanderson/.gradle/caches/transforms-3/9e5dc7d1a40a2a22b351276ca8ab5d31/transformed/jetified-play-services-maps-17.0.1/AndroidManifest.xml:30:5-34:15
+29
+30        <!-- Needs to be explicitly declared on Android R+ -->
+31        <package android:name="com.google.android.apps.maps" />
+31-->[com.google.android.gms:play-services-maps:17.0.1] /Users/abbieanderson/.gradle/caches/transforms-3/9e5dc7d1a40a2a22b351276ca8ab5d31/transformed/jetified-play-services-maps-17.0.1/AndroidManifest.xml:33:9-64
+31-->[com.google.android.gms:play-services-maps:17.0.1] /Users/abbieanderson/.gradle/caches/transforms-3/9e5dc7d1a40a2a22b351276ca8ab5d31/transformed/jetified-play-services-maps-17.0.1/AndroidManifest.xml:33:18-61
+32    </queries>
 33
-34                <category android:name="android.intent.category.LAUNCHER" />
-34-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:24:17-77
-34-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:24:27-74
-35            </intent-filter>
-36        </activity>
-37
-38        <service
-38-->[androidx.room:room-runtime:2.3.0] /Users/abbieanderson/.gradle/caches/transforms-3/ac7ff69e7d5867c30d306a6ef7c68b1b/transformed/room-runtime-2.3.0/AndroidManifest.xml:25:9-28:40
-39            android:name="androidx.room.MultiInstanceInvalidationService"
-39-->[androidx.room:room-runtime:2.3.0] /Users/abbieanderson/.gradle/caches/transforms-3/ac7ff69e7d5867c30d306a6ef7c68b1b/transformed/room-runtime-2.3.0/AndroidManifest.xml:26:13-74
-40            android:directBootAware="true"
-40-->[androidx.room:room-runtime:2.3.0] /Users/abbieanderson/.gradle/caches/transforms-3/ac7ff69e7d5867c30d306a6ef7c68b1b/transformed/room-runtime-2.3.0/AndroidManifest.xml:27:13-43
-41            android:exported="false" />
-41-->[androidx.room:room-runtime:2.3.0] /Users/abbieanderson/.gradle/caches/transforms-3/ac7ff69e7d5867c30d306a6ef7c68b1b/transformed/room-runtime-2.3.0/AndroidManifest.xml:28:13-37
-42
-43        <activity
-43-->[com.google.android.gms:play-services-base:17.5.0] /Users/abbieanderson/.gradle/caches/transforms-3/a8194bec808a4b1d50c68950347bbb90/transformed/jetified-play-services-base-17.5.0/AndroidManifest.xml:23:9-26:75
-44            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-44-->[com.google.android.gms:play-services-base:17.5.0] /Users/abbieanderson/.gradle/caches/transforms-3/a8194bec808a4b1d50c68950347bbb90/transformed/jetified-play-services-base-17.5.0/AndroidManifest.xml:24:13-79
-45            android:exported="false"
-45-->[com.google.android.gms:play-services-base:17.5.0] /Users/abbieanderson/.gradle/caches/transforms-3/a8194bec808a4b1d50c68950347bbb90/transformed/jetified-play-services-base-17.5.0/AndroidManifest.xml:25:13-37
-46            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-46-->[com.google.android.gms:play-services-base:17.5.0] /Users/abbieanderson/.gradle/caches/transforms-3/a8194bec808a4b1d50c68950347bbb90/transformed/jetified-play-services-base-17.5.0/AndroidManifest.xml:26:13-72
-47
-48        <meta-data
-48-->[com.google.android.gms:play-services-basement:17.5.0] /Users/abbieanderson/.gradle/caches/transforms-3/a45bf501a8e7b5b90523191242de2bcc/transformed/jetified-play-services-basement-17.5.0/AndroidManifest.xml:23:9-25:69
-49            android:name="com.google.android.gms.version"
-49-->[com.google.android.gms:play-services-basement:17.5.0] /Users/abbieanderson/.gradle/caches/transforms-3/a45bf501a8e7b5b90523191242de2bcc/transformed/jetified-play-services-basement-17.5.0/AndroidManifest.xml:24:13-58
-50            android:value="@integer/google_play_services_version" />
-50-->[com.google.android.gms:play-services-basement:17.5.0] /Users/abbieanderson/.gradle/caches/transforms-3/a45bf501a8e7b5b90523191242de2bcc/transformed/jetified-play-services-basement-17.5.0/AndroidManifest.xml:25:13-66
-51    </application>
-52
-53</manifest>
+34    <application
+34-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:16:5-38:19
+35        android:name="com.finder.MyApp"
+35-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:17:9-30
+36        android:allowBackup="true"
+36-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:18:9-35
+37        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+37-->[androidx.core:core:1.6.0] /Users/abbieanderson/.gradle/caches/transforms-3/2d9d00bdb8c9ad05c3b2f81504862a90/transformed/core-1.6.0/AndroidManifest.xml:24:18-86
+38        android:debuggable="true"
+39        android:extractNativeLibs="false"
+40        android:icon="@mipmap/ic_launcher"
+40-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:19:9-43
+41        android:label="@string/app_name"
+41-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:20:9-41
+42        android:roundIcon="@mipmap/ic_launcher_round"
+42-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:21:9-54
+43        android:supportsRtl="true"
+43-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:22:9-35
+44        android:testOnly="true"
+45        android:theme="@style/Theme.Finder" >
+45-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:23:9-44
+46        <meta-data
+47            android:name="com.google.android.geo.API_KEY"
+47-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:26:13-58
+48            android:value="AIzaSyDQSd210wKX_7cz9MELkxhaEOUhFP0AkSk" />
+48-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:27:13-38
+49
+50        <activity
+50-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:29:9-37:20
+51            android:name="com.finder.MainActivity"
+51-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:30:13-41
+52            android:exported="true" >
+52-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:31:13-36
+53            <intent-filter>
+53-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:32:13-36:29
+54                <action android:name="android.intent.action.MAIN" />
+54-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:33:17-69
+54-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:33:25-66
+55
+56                <category android:name="android.intent.category.LAUNCHER" />
+56-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:35:17-77
+56-->/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/AndroidManifest.xml:35:27-74
+57            </intent-filter>
+58        </activity>
+59
+60        <service
+60-->[androidx.room:room-runtime:2.3.0] /Users/abbieanderson/.gradle/caches/transforms-3/c7fa400a29d63a892de0c64fd2491cdc/transformed/room-runtime-2.3.0/AndroidManifest.xml:25:9-28:40
+61            android:name="androidx.room.MultiInstanceInvalidationService"
+61-->[androidx.room:room-runtime:2.3.0] /Users/abbieanderson/.gradle/caches/transforms-3/c7fa400a29d63a892de0c64fd2491cdc/transformed/room-runtime-2.3.0/AndroidManifest.xml:26:13-74
+62            android:directBootAware="true"
+62-->[androidx.room:room-runtime:2.3.0] /Users/abbieanderson/.gradle/caches/transforms-3/c7fa400a29d63a892de0c64fd2491cdc/transformed/room-runtime-2.3.0/AndroidManifest.xml:27:13-43
+63            android:exported="false" /> <!-- Needs to be explicitly declared on P+ -->
+63-->[androidx.room:room-runtime:2.3.0] /Users/abbieanderson/.gradle/caches/transforms-3/c7fa400a29d63a892de0c64fd2491cdc/transformed/room-runtime-2.3.0/AndroidManifest.xml:28:13-37
+64        <uses-library
+64-->[com.google.android.gms:play-services-maps:17.0.1] /Users/abbieanderson/.gradle/caches/transforms-3/9e5dc7d1a40a2a22b351276ca8ab5d31/transformed/jetified-play-services-maps-17.0.1/AndroidManifest.xml:39:9-41:40
+65            android:name="org.apache.http.legacy"
+65-->[com.google.android.gms:play-services-maps:17.0.1] /Users/abbieanderson/.gradle/caches/transforms-3/9e5dc7d1a40a2a22b351276ca8ab5d31/transformed/jetified-play-services-maps-17.0.1/AndroidManifest.xml:40:13-50
+66            android:required="false" />
+66-->[com.google.android.gms:play-services-maps:17.0.1] /Users/abbieanderson/.gradle/caches/transforms-3/9e5dc7d1a40a2a22b351276ca8ab5d31/transformed/jetified-play-services-maps-17.0.1/AndroidManifest.xml:41:13-37
+67
+68        <activity
+68-->[com.google.android.gms:play-services-base:17.5.0] /Users/abbieanderson/.gradle/caches/transforms-3/6183d4c36d8266be255304ae80392485/transformed/jetified-play-services-base-17.5.0/AndroidManifest.xml:23:9-26:75
+69            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+69-->[com.google.android.gms:play-services-base:17.5.0] /Users/abbieanderson/.gradle/caches/transforms-3/6183d4c36d8266be255304ae80392485/transformed/jetified-play-services-base-17.5.0/AndroidManifest.xml:24:13-79
+70            android:exported="false"
+70-->[com.google.android.gms:play-services-base:17.5.0] /Users/abbieanderson/.gradle/caches/transforms-3/6183d4c36d8266be255304ae80392485/transformed/jetified-play-services-base-17.5.0/AndroidManifest.xml:25:13-37
+71            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+71-->[com.google.android.gms:play-services-base:17.5.0] /Users/abbieanderson/.gradle/caches/transforms-3/6183d4c36d8266be255304ae80392485/transformed/jetified-play-services-base-17.5.0/AndroidManifest.xml:26:13-72
+72
+73        <meta-data
+73-->[com.google.android.gms:play-services-basement:17.5.0] /Users/abbieanderson/.gradle/caches/transforms-3/ff4d7cde19323429174e5aa14c7c073c/transformed/jetified-play-services-basement-17.5.0/AndroidManifest.xml:23:9-25:69
+74            android:name="com.google.android.gms.version"
+74-->[com.google.android.gms:play-services-basement:17.5.0] /Users/abbieanderson/.gradle/caches/transforms-3/ff4d7cde19323429174e5aa14c7c073c/transformed/jetified-play-services-basement-17.5.0/AndroidManifest.xml:24:13-58
+75            android:value="@integer/google_play_services_version" />
+75-->[com.google.android.gms:play-services-basement:17.5.0] /Users/abbieanderson/.gradle/caches/transforms-3/ff4d7cde19323429174e5aa14c7c073c/transformed/jetified-play-services-basement-17.5.0/AndroidManifest.xml:25:13-66
+76    </application>
+77
+78</manifest>

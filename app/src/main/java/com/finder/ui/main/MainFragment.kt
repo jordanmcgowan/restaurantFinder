@@ -15,9 +15,8 @@ import io.reactivex.disposables.CompositeDisposable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
+import com.finder.toSuggestionLite
+import com.finder.ui.map.MapFragment
 
 private const val LAT_PARAM = "lat_bundle_param"
 private const val LONG_PARAM = "long_bundle_param"
@@ -99,6 +98,11 @@ class MainFragment : Fragment() {
     (activity as AppCompatActivity?)?.supportActionBar?.hide()
   }
 
+  override fun onDestroy() {
+    super.onDestroy()
+    compositeDisposable.dispose()
+  }
+
   private fun render(state: SuggestionState) {
     when (state) {
       is SuggestionState.Loading -> {
@@ -106,6 +110,8 @@ class MainFragment : Fragment() {
         binding.progressBar.isVisible = true
       }
       is SuggestionState.Content -> {
+        binding.progressBar.isVisible = false
+        binding.searchLayout.isVisible = true
 
         // TODO -  I think this is causing the entire adapter to rebind and lose teh scroll state...
         viewModel.getCachedSuggestions().observe(viewLifecycleOwner, Observer { suggestions ->
@@ -120,8 +126,6 @@ class MainFragment : Fragment() {
             }
           }
 
-          binding.progressBar.isVisible = false
-          binding.searchLayout.isVisible = true
           binding.suggestionList.apply {
             val suggestionAdapter = SuggestionAdapter(
               actionHandler = ::handleAction
@@ -130,6 +134,13 @@ class MainFragment : Fragment() {
             adapter = suggestionAdapter
             layoutManager = LinearLayoutManager(context)
             isVisible = true
+          }
+
+          // Setup the FAB to pass the suggestions along to render the map view
+          binding.fab.setOnClickListener {
+            handleAction(action = SuggestionAction.SeeSuggestionsOnMap(suggestionList = officialSuggestions.map {
+              it.toSuggestionLite()
+            }))
           }
         })
       }
@@ -165,8 +176,21 @@ class MainFragment : Fragment() {
           .addToBackStack(null)
           .commit()
       }
+      is SuggestionAction.SeeSuggestionsOnMap -> {
+        parentFragmentManager.beginTransaction()
+          .replace(
+            // Not super happy with this, but it's enough to get the new Fragment to
+            // open. Ideally we could use this binding's root - for some reason
+            // `binding.root.id` wasn't working for me, but this did
+            ((view as ViewGroup).parent as View).id,
+            MapFragment.newInstance(suggestionList = action.suggestionList),
+            MapFragment.TAG
+          )
+          .addToBackStack(null)
+          .commit()
+      }
       is SuggestionAction.UpdateFavoriteState -> {
-        viewModel.updateFavoriteState(action.suggestion)
+        viewModel.updateFavoriteState(suggestion = action.suggestion)
       }
     }
   }

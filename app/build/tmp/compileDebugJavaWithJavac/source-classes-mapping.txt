@@ -1,11 +1,16 @@
-com/finder/databinding/SuggestionItemBinding.java
- com.finder.databinding.SuggestionItemBinding
+com/finder/databinding/FragmentMapBinding.java
+ com.finder.databinding.FragmentMapBinding
 com/finder/BuildConfig.java
  com.finder.BuildConfig
-com/finder/databinding/MainFragmentBinding.java
- com.finder.databinding.MainFragmentBinding
 com/finder/databinding/MainActivityBinding.java
  com.finder.databinding.MainActivityBinding
+com/finder/databinding/MainFragmentBinding.java
+ com.finder.databinding.MainFragmentBinding
+com/finder/databinding/SuggestionItemBinding.java
+ com.finder.databinding.SuggestionItemBinding
+com/finder/storage/SuggestionDatabase_Impl.java
+ com.finder.storage.SuggestionDatabase_Impl
+ com.finder.storage.SuggestionDatabase_Impl$1
 com/finder/ui/main/MainViewModel_MembersInjector.java
  com.finder.ui.main.MainViewModel_MembersInjector
 com/finder/di/DaggerPlacesComponent.java
@@ -32,8 +37,5 @@ com/finder/di/PlacesManagerModule_GetNetworkFactory.java
  com.finder.di.PlacesManagerModule_GetNetworkFactory
 com/finder/di/PlacesManagerModule_GetRetrofitFactory.java
  com.finder.di.PlacesManagerModule_GetRetrofitFactory
-com/finder/storage/SuggestionDatabase_Impl.java
- com.finder.storage.SuggestionDatabase_Impl
- com.finder.storage.SuggestionDatabase_Impl$1
 com/finder/databinding/DetailFragmentBinding.java
  com.finder.databinding.DetailFragmentBinding

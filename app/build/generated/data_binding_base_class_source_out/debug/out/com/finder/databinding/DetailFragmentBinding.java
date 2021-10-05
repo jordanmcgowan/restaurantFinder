@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +39,9 @@ public final class DetailFragmentBinding implements ViewBinding {
   public final TextView priceLevel;
 
   @NonNull
+  public final ProgressBar progressBar;
+
+  @NonNull
   public final AppCompatRatingBar rating;
 
   @NonNull
@@ -45,14 +49,15 @@ public final class DetailFragmentBinding implements ViewBinding {
 
   private DetailFragmentBinding(@NonNull ConstraintLayout rootView, @NonNull TextView address,
       @NonNull AppCompatCheckBox favoriteIcon, @NonNull ImageView image, @NonNull TextView name,
-      @NonNull TextView priceLevel, @NonNull AppCompatRatingBar rating,
-      @NonNull TextView ratingCount) {
+      @NonNull TextView priceLevel, @NonNull ProgressBar progressBar,
+      @NonNull AppCompatRatingBar rating, @NonNull TextView ratingCount) {
     this.rootView = rootView;
     this.address = address;
     this.favoriteIcon = favoriteIcon;
     this.image = image;
     this.name = name;
     this.priceLevel = priceLevel;
+    this.progressBar = progressBar;
     this.rating = rating;
     this.ratingCount = ratingCount;
   }
@@ -114,6 +119,12 @@ public final class DetailFragmentBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.progress_bar;
+      ProgressBar progressBar = ViewBindings.findChildViewById(rootView, id);
+      if (progressBar == null) {
+        break missingId;
+      }
+
       id = R.id.rating;
       AppCompatRatingBar rating = ViewBindings.findChildViewById(rootView, id);
       if (rating == null) {
@@ -127,7 +138,7 @@ public final class DetailFragmentBinding implements ViewBinding {
       }
 
       return new DetailFragmentBinding((ConstraintLayout) rootView, address, favoriteIcon, image,
-          name, priceLevel, rating, ratingCount);
+          name, priceLevel, progressBar, rating, ratingCount);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

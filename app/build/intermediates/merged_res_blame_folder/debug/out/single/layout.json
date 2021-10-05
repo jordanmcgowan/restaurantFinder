@@ -12,6 +12,10 @@
         "source": "/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/res/layout/main_activity.xml"
     },
     {
+        "merged": "/Users/abbieanderson/jordan/git/restaurantFinder/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_map.xml",
+        "source": "/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/res/layout/fragment_map.xml"
+    },
+    {
         "merged": "/Users/abbieanderson/jordan/git/restaurantFinder/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/detail_fragment.xml",
         "source": "/Users/abbieanderson/jordan/git/restaurantFinder/app/src/main/res/layout/detail_fragment.xml"
     }
