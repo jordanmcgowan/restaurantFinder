@@ -67,6 +67,7 @@ class MainFragment : Fragment() {
       }
 
       override fun onQueryTextSubmit(keyword: String?): Boolean {
+        render(SuggestionState.Loading)
         getSearchSuggestions(lat = lat, long = long, keyword = keyword)
         return true
       }
@@ -113,6 +114,10 @@ class MainFragment : Fragment() {
     when (state) {
       is SuggestionState.Loading -> {
         binding.progressBar.isVisible = true
+        // Make sure the progress bar can always been seen. When we're searching for a keyword, the
+        // previous search results will be on the screen and we need to be sure the spinner can be
+        // seen
+        binding.progressBar.bringToFront()
       }
       is SuggestionState.Content -> {
         binding.progressBar.isVisible = false

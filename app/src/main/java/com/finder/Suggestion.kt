@@ -20,6 +20,7 @@ data class Suggestion(
   // Details
   val lat: Float? = null,
   val lng: Float? = null,
+  val openNow: Boolean = false,
   val isFavorite: Boolean = false
 ) : Serializable
 

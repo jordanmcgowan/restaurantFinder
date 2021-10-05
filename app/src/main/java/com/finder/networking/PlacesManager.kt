@@ -120,7 +120,8 @@ class PlacesManager internal constructor(
       ratingCount = suggestionResponse.ratingCount,
       priceLevel = suggestionResponse.priceLevel,
       lat = suggestionResponse.geometry?.location?.latitude,
-      lng = suggestionResponse.geometry?.location?.longitude
+      lng = suggestionResponse.geometry?.location?.longitude,
+      openNow = suggestionResponse.hoursResponse?.openNow ?: false
     )
   }
 }

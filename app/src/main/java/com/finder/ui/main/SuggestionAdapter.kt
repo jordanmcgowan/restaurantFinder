@@ -49,7 +49,6 @@ class SuggestionViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
   fun bind(suggestion: Suggestion) {
-    // TODO - Text is stretching beyond the end constraint and not elipsing
     binding.name.text = suggestion.name
     Glide
       .with(binding.root.context)
@@ -90,6 +89,12 @@ class SuggestionViewHolder(
 
     // The fact this is a check box will handle updates, but not the initial state setting
     binding.favoriteIcon.isChecked = suggestion.isFavorite
+
+    binding.openStatus.apply {
+      isVisible = true
+      text = if (suggestion.openNow) context.getString(R.string.open_now) else context.getString(R.string.currently_closed)
+      setTextColor(if (suggestion.openNow) context.getColor(R.color.light_green) else context.getColor(R.color.dark_grey))
+    }
 
     binding.favoriteIcon.setOnClickListener {
       val isFavorite = binding.favoriteIcon.isChecked
