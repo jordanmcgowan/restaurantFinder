@@ -28,6 +28,11 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/image"
+        app:layout_constraintEnd_toStartOf="@id/favorite_icon"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:gravity="start"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/dark_grey"
         android:textSize="@dimen/largeTextSize"
         android:textStyle="bold"
@@ -87,5 +92,15 @@
         android:textSize="@dimen/mediumTextSize"
         tools:text="1234 Main St" />
 
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/favorite_icon"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:contentDescription="@string/favorite_cont_desc"
+        android:button="@drawable/favorite_checkbox"
+        android:enabled="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:checked="false"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

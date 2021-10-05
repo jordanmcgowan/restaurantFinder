@@ -1,15 +1,17 @@
 package com.finder.ui.main
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.finder.MyApp
-import com.finder.networking.PlacesApi
 import com.finder.networking.PlacesManager
-import com.finder.networking.Suggestion
+import com.finder.Suggestion
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainViewModel : ViewModel() {
@@ -26,8 +28,9 @@ class MainViewModel : ViewModel() {
     private val state = BehaviorSubject.create<SuggestionState>()
     fun state(): Observable<SuggestionState> = state.hide()
 
-    // This method should be called on App Launch based on current location
-    fun getSuggestionsBasedOnLocation(
+    // This method should be called on App Launch based on current location (with a null keyword)
+    // and after keyword searches (with a valid keyword)
+    fun getSuggestions(
         lat: Double? = null,
         long: Double? = null,
         // This wil be present when the user has entered a search term. It will be null on app
@@ -43,14 +46,25 @@ class MainViewModel : ViewModel() {
                 keyword = keyword
             ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    if (it.isNotEmpty()) {
-                        state.onNext(SuggestionState.Content(it))
+                .subscribe { suggestionResponse ->
+                    if (suggestionResponse.isNotEmpty()) {
+                        state.onNext(SuggestionState.Content(suggestionResponse))
+                        //TODO - something outside the viewModelScope...
                     } else {
                         state.onNext(SuggestionState.Empty)
                     }
                 }
         )
+    }
+
+    fun updateFavoriteState(suggestion: Suggestion) {
+        viewModelScope.launch {
+            placesManager.insertOrOverrideSuggestionState(suggestion = suggestion)
+        }
+    }
+
+    fun getCachedSuggestions(): LiveData<List<Suggestion>> {
+        return placesManager.getCachedSuggestions()
     }
 }
 
@@ -66,4 +80,11 @@ sealed class SuggestionState {
 
 sealed class SuggestionAction {
     data class SeeSuggestionDetails(val suggestion: Suggestion): SuggestionAction()
+    data class UpdateFavoriteState(val suggestion: Suggestion): SuggestionAction()
+}
+
+fun <T> List<T>.findAndTransform(predicate: (T) -> Boolean, transform: (T) -> T): List<T> {
+    return map {
+        if (predicate(it)) transform(it) else it
+    }
 }
