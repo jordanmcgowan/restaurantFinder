@@ -1,107 +1,118 @@
 package com.finder.networking
 
-import com.finder.MyApp
+import androidx.lifecycle.LiveData
+import com.finder.Suggestion
+import com.finder.storage.SuggestionRepository
 import io.reactivex.Observable
-import javax.inject.Inject
 
 class PlacesManager internal constructor(
-    private val placesApi: PlacesApi
+  private val placesApi: PlacesApi,
+  private val suggestionRepository: SuggestionRepository
 ) {
 
 
-    fun fetchGeneralRestaurantSuggestions(
-        lat: Double?,
-        long: Double?,
-        // Only will be used when coming from the Search flow, not for base suggestions
-        keyword: String?
-    ): Observable<List<Suggestion>> {
-        return Observable.create { subscriber ->
-            // Query requires a comma sep lat, long. We can construct that here
-            val locationString = "${lat},${long}"
+  fun fetchGeneralRestaurantSuggestions(
+    lat: Double?,
+    long: Double?,
+    // Only will be used when coming from the Search flow, not for base suggestions
+    keyword: String?
+  ): Observable<List<Suggestion>> {
+    return Observable.create { subscriber ->
+      // Query requires a comma sep lat, long. We can construct that here
+      val locationString = "${lat},${long}"
 
-            val response =
-                placesApi.fetchRestaurantSuggestionsBasedOnLocation(
-                    location = locationString,
-                    keyword = keyword
-                ).execute()
+      val response =
+        placesApi.fetchRestaurantSuggestionsBasedOnLocation(
+          location = locationString,
+          keyword = keyword
+        ).execute()
 
-            if (response.isSuccessful) {
-                // TODO - Handle empty list?
-                // Suggestions without names will be filtered out since they won't be meaningful
-                // to the user
-                val suggestions = response.body()?.results?.filter { it.name != null }?.map {
-                    Suggestion(
-                        name = it.name!!,
-                        address = it.formattedAddress,
-                        rating = it.rating,
-                        // Trust the first image is the best -- the API doesn't provide a better
-                        // option
-                        imageReference = it.photos?.get(0)?.reference,
-                        ratingCount = it.ratingCount,
-                        priceLevel = it.priceLevel,
-                        placeId = it.placeId
-                    )
-                } ?: emptyList()
+      if (response.isSuccessful) {
 
-                subscriber.onNext(suggestions)
-                // TODO - necessary?
-                subscriber.onComplete()
+        // TODO - Handle empty list?
+        /**
+         * Suggestions without:
+         *  - names will be filtered out since they won't be meaningful to the user
+         *  - placeIds will be filtered out since it's the query key in the DB and must be
+         *  present for DB operations
+         */
+        val suggestions =
+          response.body()?.results?.filter { it.name != null && it.placeId != null }
+            ?.map {
+              transformSuggestionResponse(suggestionResponse = it)
+            } ?: emptyList()
 
-            } else {
-                subscriber.onError(Throwable(response.message()))
-            }
+        subscriber.onNext(suggestions)
+        // TODO - necessary?
+        subscriber.onComplete()
 
-        }
+      } else {
+        subscriber.onError(Throwable(response.message()))
+      }
+
     }
+  }
 
-    fun fetchSuggestionDetails(
-        suggestionId: String
-    ): Observable<Suggestion> {
-        return Observable.create { subscriber ->
+  fun fetchSuggestionDetails(
+    suggestionId: String
+  ): Observable<Suggestion> {
+    return Observable.create { subscriber ->
 
-            val response =
-                placesApi.fetchRestaurantSuggestionDetails(suggestionId = suggestionId)
-                    .execute()
+      val response =
+        placesApi.fetchRestaurantSuggestionDetails(suggestionId = suggestionId)
+          .execute()
 
-            if (response.isSuccessful) {
-                val suggestion = response.body()?.result?.let {
-                    Suggestion(
-                        name = it.name!!,
-                        address = it.formattedAddress,
-                        rating = it.rating,
-                        // Trust the first image is the best -- the API doesn't provide a better
-                        // option
-                        imageReference = it.photos?.get(0)?.reference,
-                        ratingCount = it.ratingCount,
-                        priceLevel = it.priceLevel,
-                        placeId = it.placeId,
-                        lat = it.geometry?.location?.latitude,
-                        long = it.geometry?.location?.longitude
-                    )
-                }
-
-                subscriber.onNext(suggestion)
-                // TODO - necessary?
-                subscriber.onComplete()
-
-            } else {
-                subscriber.onError(Throwable(response.message()))
-            }
-
+      val result = response.body()?.result
+      /**
+       * A response without a:
+       *  - name will be considered invalid since it won't be meaningful to the user
+       *  - placeId will be considered invalid since it's the query key in the DB and must
+       *  be present for DB operations
+       */
+      if (response.isSuccessful && result != null && result.name != null && result.placeId != null) {
+        val suggestion = response.body()?.result?.let {
+          transformSuggestionResponse(suggestionResponse = it)
         }
+
+        subscriber.onNext(suggestion)
+        // TODO - necessary?
+        subscriber.onComplete()
+
+      } else {
+        subscriber.onError(Throwable(response.message()))
+      }
+
     }
+  }
+
+  fun getCachedSuggestions(): LiveData<List<Suggestion>> {
+    return suggestionRepository.getCachedSuggestions()
+  }
+
+  fun getSuggestionFromPlaceId(placeId: String): LiveData<Suggestion> {
+    return suggestionRepository.getSuggestionFromPlaceId(placeId = placeId)
+  }
+
+  suspend fun insertOrOverrideSuggestionState(suggestion: Suggestion) {
+    suggestionRepository.storeSuggestionInDB(suggestion)
+  }
+
+  private fun transformSuggestionResponse(suggestionResponse: RestaurantResultResponse): Suggestion {
+    return Suggestion(
+      name = suggestionResponse.name!!,
+      placeId = suggestionResponse.placeId!!,
+      address = suggestionResponse.formattedAddress,
+      rating = suggestionResponse.rating,
+      // Trust the first image is the best -- the API doesn't provide a better
+      // option
+      imageReference = suggestionResponse.photos?.get(0)?.reference,
+      ratingCount = suggestionResponse.ratingCount,
+      priceLevel = suggestionResponse.priceLevel,
+      lat = suggestionResponse.geometry?.location?.latitude,
+      lng = suggestionResponse.geometry?.location?.longitude,
+      // TODO
+      isFavorite = false
+    )
+  }
 }
 
-data class Suggestion(
-    val name: String,
-    val imageReference: String?,
-    val address: String?,
-    val rating: Float?,
-    val ratingCount: Int?,
-    val priceLevel: Int?,
-    val placeId: String?,
-    // We'll give these a default as they're unused in the Suggestion List context, only with
-    // Details
-    val lat: Float? = null,
-    val long: Float? = null
-)
