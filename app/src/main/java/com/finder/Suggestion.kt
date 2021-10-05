@@ -34,7 +34,8 @@ data class SuggestionLite(
   val placeId: String,
   val lat: Float?,
   val lng: Float?,
-  val name: String
+  val name: String,
+  val address: String?
 ): Parcelable
 
 fun Suggestion.toSuggestionLite(): SuggestionLite {
@@ -42,7 +43,8 @@ fun Suggestion.toSuggestionLite(): SuggestionLite {
     placeId = placeId,
     lat = lat,
     lng = lng,
-    name = name
+    name = name,
+    address = address
   )
 }
 

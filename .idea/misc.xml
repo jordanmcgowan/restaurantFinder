@@ -3,7 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../layout/custom_preview.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/drawable/border_layout.xml" value="0.1421875" />
+        <entry key="app/src/main/res/drawable/empty_icon.xml" value="0.25052083333333336" />
+        <entry key="app/src/main/res/drawable/error_icon.xml" value="0.125" />
+        <entry key="app/src/main/res/drawable/error_icon2.xml" value="0.125" />
         <entry key="app/src/main/res/drawable/favorite_checkbox.xml" value="0.12760416666666666" />
         <entry key="app/src/main/res/drawable/favorite_checked.xml" value="0.12135416666666667" />
         <entry key="app/src/main/res/drawable/favorite_disabled.xml" value="0.11822916666666666" />
@@ -12,9 +16,10 @@
         <entry key="app/src/main/res/drawable/map_icon.xml" value="0.17604166666666668" />
         <entry key="app/src/main/res/layout/border_layout.xml" value="0.16983695652173914" />
         <entry key="app/src/main/res/layout/detail_fragment.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.25" />
         <entry key="app/src/main/res/layout/main_activity.xml" value="0.13541666666666666" />
-        <entry key="app/src/main/res/layout/main_fragment.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/suggestion_item.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/main_fragment.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/suggestion_item.xml" value="0.25" />
       </map>
     </option>
   </component>

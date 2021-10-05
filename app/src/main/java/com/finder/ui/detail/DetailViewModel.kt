@@ -6,10 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.finder.MyApp
 import com.finder.networking.PlacesManager
 import com.finder.Suggestion
+import com.finder.networking.DetailsResponse
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,32 +21,16 @@ class DetailViewModel : ViewModel() {
     MyApp.placesComponent.inject(this)
   }
 
-  private val compositeDisposable = CompositeDisposable()
-
   private val state = BehaviorSubject.create<DetailState>()
   fun state(): Observable<DetailState> = state.hide()
 
-  // This method should be called on App Launch based on current location
   fun getSuggestionDetails(
-    suggestionId: String? = null
-  ) {
+    suggestionId: String
+  ): LiveData<DetailsResponse> {
     state.onNext(DetailState.Loading)
-
-    if (suggestionId == null) {
-      // This should save issues with an arguments key mismatch should it happen
-      state.onNext(DetailState.Error)
-    } else {
-      compositeDisposable.add(
-        placesManager.fetchSuggestionDetails(
-          suggestionId = suggestionId
-        ).subscribeOn(Schedulers.io())
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribe {
-            state.onNext(DetailState.Content(it))
-          }
-      )
-    }
-
+    return placesManager.fetchSuggestionDetails(
+      suggestionId = suggestionId
+    )
   }
 
   fun updateFavoriteState(suggestion: Suggestion) {
@@ -68,7 +50,7 @@ sealed class DetailState {
   data class Content(
     val suggestion: Suggestion
   ) : DetailState()
-
-  // TODO - pipe through the network failures?
-  object Error : DetailState()
+  data class Error(
+    val message: String
+  ): DetailState()
 }

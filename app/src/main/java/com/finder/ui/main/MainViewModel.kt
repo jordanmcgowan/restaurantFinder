@@ -7,10 +7,8 @@ import com.finder.MyApp
 import com.finder.networking.PlacesManager
 import com.finder.Suggestion
 import com.finder.SuggestionLite
+import com.finder.networking.SearchResponse
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,8 +22,6 @@ class MainViewModel : ViewModel() {
         MyApp.placesComponent.inject(this)
     }
 
-    private val compositeDisposable = CompositeDisposable()
-
     private val state = BehaviorSubject.create<SuggestionState>()
     fun state(): Observable<SuggestionState> = state.hide()
 
@@ -37,24 +33,12 @@ class MainViewModel : ViewModel() {
         // This wil be present when the user has entered a search term. It will be null on app
         // launch when we get the base suggestions
         keyword: String? = null
-    ) {
+    ): LiveData<SearchResponse> {
         state.onNext(SuggestionState.Loading)
-
-        compositeDisposable.add(
-            placesManager.fetchGeneralRestaurantSuggestions(
-                lat = lat,
-                long = long,
-                keyword = keyword
-            ).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { suggestionResponse ->
-                    if (suggestionResponse.isNotEmpty()) {
-                        state.onNext(SuggestionState.Content(suggestionResponse))
-                        //TODO - something outside the viewModelScope...
-                    } else {
-                        state.onNext(SuggestionState.Empty)
-                    }
-                }
+        return placesManager.fetchGeneralRestaurantSuggestions(
+            lat = lat,
+            long = long,
+            keyword = keyword
         )
     }
 
@@ -75,8 +59,9 @@ sealed class SuggestionState {
         val suggestionList: List<Suggestion>
     ): SuggestionState()
     object Empty: SuggestionState()
-    // TODO - pipe through the network failures?
-    object Error: SuggestionState()
+    data class Error(
+        val message: String
+    ): SuggestionState()
 }
 
 sealed class SuggestionAction {

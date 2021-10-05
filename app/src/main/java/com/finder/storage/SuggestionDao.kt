@@ -10,9 +10,6 @@ interface SuggestionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSuggestion(suggestion: Suggestion)
 
-    @Update
-    suspend fun updateSuggestion(suggestion: Suggestion)
-
     @Query("SELECT * FROM suggestions")
     fun getCachedSuggestions(): LiveData<List<Suggestion>>
 

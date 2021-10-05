@@ -19,6 +19,40 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
+    <!-- EMPTY STATE -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/error_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/error_icon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_margin="36dp"
+            android:contentDescription="@string/error_state_cont_desc"
+            android:src="@drawable/error_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/error_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/hugeTextSize"
+            android:textStyle="bold"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/error_icon" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ImageView
         android:id="@+id/image"
         android:layout_width="250dp"
@@ -42,6 +76,7 @@
         android:layout_height="wrap_content"
         style="?android:attr/ratingBarStyleSmall"
         android:theme="@style/RatingBar"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/name"
         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -85,8 +120,11 @@
         android:contentDescription="@string/favorite_cont_desc"
         android:button="@drawable/favorite_checkbox"
         android:enabled="true"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/address"
         tools:src="@drawable/favorite_disabled"/>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,4 +10,10 @@
     <!-- Used for Main Fragment -->
     <string name="search_hint">Search for a restaurant</string>
     <string name="header_title">AllTrails at Lunch</string>
+    <string name="error_state_cont_desc">Error state icon</string>
+    <string name="empty_state_notice">No results found</string>
+
+    <!--  Used for Map Fragment  -->
+    <string name="map_header">Suggestions for you</string>
+    <string name="map_subheader">Tap and item to view details</string>
 </resources>

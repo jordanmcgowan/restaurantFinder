@@ -7,10 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.commit
 import com.finder.R
 import com.finder.SuggestionLite
+import com.finder.databinding.DetailFragmentBinding
+import com.finder.databinding.FragmentMapBinding
 import com.finder.toSuggestion
 import com.finder.ui.detail.DetailFragment
+import com.finder.ui.main.MainFragment
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -56,8 +60,11 @@ class MapFragment : Fragment(), GoogleMap.OnInfoWindowClickListener {
       // FUTURE IMPROVEMENT - Force the `toSuggestionLite` method to enfore this and not allow
       // nullable fields here
       if (suggestionLite.lat != null && suggestionLite.lng != null) {
+        // FUTURE IMPROVEMENT - Use the [Marker] class with a tag == placeId for InfoWindow ID?
         val position = LatLng(suggestionLite.lat.toDouble(), suggestionLite.lng.toDouble())
-        googleMap.addMarker(MarkerOptions().position(position).title(suggestionLite.name))
+        // Using the existing Iconography from Google Maps (following standard android designs) will
+        // allow for consistency here -- just a name and an address!
+        googleMap.addMarker(MarkerOptions().position(position).title(suggestionLite.name).snippet(suggestionLite.address))
         // Let this view handle the info click so we can redirect to the DetailFragment
         googleMap.setOnInfoWindowClickListener(this)
 
@@ -96,18 +103,19 @@ class MapFragment : Fragment(), GoogleMap.OnInfoWindowClickListener {
     // This is some of the hackier code I've written recently. There's no way to know which marker
     // is tied to which suggestion...However, we know the title is equivalent to the name since we
     // set it up that way above. We can try and string match to find a match and move on should we
-    // find one
+    // find one. Since we're string matching if there are multiple results with the same name,
+    // regardless of which marker is clicked, we'll use the first match to launch the DetailFragment
     val suggestionFromMarker =
       arguments?.getParcelableArrayList<SuggestionLite>(KEY_SUGGESTION_LIST)?.first { it.name == marker.title }
     if (suggestionFromMarker != null) {
-      parentFragmentManager.beginTransaction()
-        .replace(
+      parentFragmentManager.commit {
+        replace(
           ((view as ViewGroup).parent as View).id,
-          DetailFragment.newInstance(suggestion = suggestionFromMarker.toSuggestion()),
-          DetailFragment.TAG
+          DetailFragment.newInstance(suggestionFromMarker.toSuggestion())
         )
-        .addToBackStack(null)
-        .commit()
+        setReorderingAllowed(true)
+        addToBackStack(MainFragment.TAG)
+      }
     }
   }
 }
