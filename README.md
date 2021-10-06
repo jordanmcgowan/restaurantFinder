@@ -1,5 +1,8 @@
-
 # restaurantFinder
+
+|List|Detail|Map|
+|---|---|---|
+|![Screenshot_20211006-164845](https://user-images.githubusercontent.com/10715645/136288530-c5df123d-0f00-410a-92a4-9b1df38aa87a.png)|![Screenshot_20211006-164851](https://user-images.githubusercontent.com/10715645/136288525-e45584f3-0030-4643-b78d-8a0fe7f7dd52.png)|![Screenshot_20211006-164903](https://user-images.githubusercontent.com/10715645/136288518-965ebbc6-abca-45c7-9714-755d1886fbe4.png)|
 
 This is an app that simply queries the Google Places API based on the location of the user. It will find the first 20 results for "restaurants" within 5000m. It will allow the user to visit a simple Details page that showcases some additional information off including the ability to launch their navigation app of choice to get directions there. Some pleasant bonus features include:
 * The ability to favorite locations
