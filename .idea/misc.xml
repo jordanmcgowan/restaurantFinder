@@ -13,6 +13,8 @@
         <entry key="app/src/main/res/drawable/favorite_disabled.xml" value="0.11822916666666666" />
         <entry key="app/src/main/res/drawable/favorite_enabled.xml" value="0.11822916666666666" />
         <entry key="app/src/main/res/drawable/favorite_unchecked.xml" value="0.12135416666666667" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.13854166666666667" />
+        <entry key="app/src/main/res/drawable/icon_launcher.xml" value="0.13854166666666667" />
         <entry key="app/src/main/res/drawable/map_icon.xml" value="0.17604166666666668" />
         <entry key="app/src/main/res/layout/border_layout.xml" value="0.16983695652173914" />
         <entry key="app/src/main/res/layout/detail_fragment.xml" value="0.335" />

@@ -6,6 +6,9 @@ This is an app that simply queries the Google Places API based on the location o
 * A map view showcasing locations of the items on the list screen
 * Keyword search for all your favorite cuisines, like Ethiopian food!
 
+### Running the app
+In order to use the application locally (built and deployed to your device), you'll need to app the API Key to your `local.properties` file. The attribute should be `apiKey={your_key}`. All other dependencies should be resolved naturally and the app should run correctly out of the box 
+
 ### Technical Specs
 `restraurantFinder` uses some of the latest and greatest Android technologies to provider the user a snappy interface and the developer an easier and cleaner implementation.
 
