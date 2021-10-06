@@ -13,14 +13,16 @@ import com.finder.ui.detail.DetailFragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.commit
+import androidx.lifecycle.ViewModelProvider
 import com.finder.R
 import com.finder.networking.SearchResponse
 import com.finder.toSuggestionLite
 import com.finder.ui.map.MapFragment
+import javax.inject.Inject
+import javax.inject.Provider
 
 private const val LAT_PARAM = "lat_bundle_param"
 private const val LONG_PARAM = "long_bundle_param"
-
 
 class MainFragment : Fragment() {
 

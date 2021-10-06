@@ -325,7 +325,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:$USER_HOME$/Library/Android/sdk/icons/material/materialicons/no_cell/baseline_no_cell_24.xml" />
+                                      <entry key="url" value="file:$USER_HOME$/Library/Android/sdk/icons/material/materialicons/fastfood/baseline_fastfood_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -335,7 +335,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="error_icon2" />
+                            <entry key="outputName" value="icon_launcher" />
                           </map>
                         </option>
                       </PersistentState>
