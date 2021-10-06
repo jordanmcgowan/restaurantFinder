@@ -6,12 +6,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.commit
 import com.finder.R
 import com.finder.SuggestionLite
-import com.finder.databinding.DetailFragmentBinding
-import com.finder.databinding.FragmentMapBinding
 import com.finder.toSuggestion
 import com.finder.ui.detail.DetailFragment
 import com.finder.ui.main.MainFragment
@@ -20,6 +17,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Marker
@@ -64,7 +62,14 @@ class MapFragment : Fragment(), GoogleMap.OnInfoWindowClickListener {
         val position = LatLng(suggestionLite.lat.toDouble(), suggestionLite.lng.toDouble())
         // Using the existing Iconography from Google Maps (following standard android designs) will
         // allow for consistency here -- just a name and an address!
-        googleMap.addMarker(MarkerOptions().position(position).title(suggestionLite.name).snippet(suggestionLite.address))
+        val marker = MarkerOptions().position(position).title(suggestionLite.name)
+          .snippet(suggestionLite.address)
+        // To highlight any potential favorites on the list, we'll update the color of the icon to
+        // be as close to the green theme we use in this app
+        if (suggestionLite.isFavorite) {
+          marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+        }
+        googleMap.addMarker(marker)
         // Let this view handle the info click so we can redirect to the DetailFragment
         googleMap.setOnInfoWindowClickListener(this)
 
@@ -106,7 +111,8 @@ class MapFragment : Fragment(), GoogleMap.OnInfoWindowClickListener {
     // find one. Since we're string matching if there are multiple results with the same name,
     // regardless of which marker is clicked, we'll use the first match to launch the DetailFragment
     val suggestionFromMarker =
-      arguments?.getParcelableArrayList<SuggestionLite>(KEY_SUGGESTION_LIST)?.first { it.name == marker.title }
+      arguments?.getParcelableArrayList<SuggestionLite>(KEY_SUGGESTION_LIST)
+        ?.first { it.name == marker.title }
     if (suggestionFromMarker != null) {
       parentFragmentManager.commit {
         replace(
