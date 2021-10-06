@@ -19,4 +19,7 @@
     <!--  Used for Map Fragment  -->
     <string name="map_header">Suggestions for you</string>
     <string name="map_subheader">Tap and item to view details</string>
+
+    <!--  Used for Detail Fragment  -->
+    <string name="review_prefix">Most recent review:\n</string>
 </resources>

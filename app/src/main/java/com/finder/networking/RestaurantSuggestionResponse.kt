@@ -38,7 +38,8 @@ data class RestaurantResultResponse(
   @Json(name = "rating") val rating: Float? = null,
   @Json(name = "user_ratings_total") val ratingCount: Int? = null,
   @Json(name = "price_level") val priceLevel: Int? = null,
-  @Json(name = "photos") val photos: List<RestaurantPhotosResponse>? = null
+  @Json(name = "photos") val photos: List<RestaurantPhotosResponse>? = null,
+  @Json(name = "reviews") val reviews: List<RestaurantReviewsResponse>? = null
 )
 
 @JsonClass(generateAdapter = true)
@@ -61,4 +62,9 @@ data class RestaurantLocationResponse(
 @JsonClass(generateAdapter = true)
 data class RestaurantPhotosResponse(
   @Json(name = "photo_reference") val reference: String
+)
+
+@JsonClass(generateAdapter = true)
+data class RestaurantReviewsResponse(
+  @Json(name = "text") val text: String?
 )

@@ -121,7 +121,10 @@ class PlacesManager internal constructor(
       priceLevel = suggestionResponse.priceLevel,
       lat = suggestionResponse.geometry?.location?.latitude,
       lng = suggestionResponse.geometry?.location?.longitude,
-      openNow = suggestionResponse.hoursResponse?.openNow ?: false
+      openNow = suggestionResponse.hoursResponse?.openNow ?: false,
+      // We'll just grab the first review, which should be the most recent to display to the user on
+      // the DetailFragment
+      reviewText = suggestionResponse.reviews?.first()?.text
     )
   }
 }

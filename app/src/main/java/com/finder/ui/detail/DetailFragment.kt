@@ -2,6 +2,7 @@ package com.finder.ui.detail
 
 import android.content.Intent
 import android.graphics.Paint
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,9 +16,17 @@ import com.finder.R
 import com.finder.databinding.DetailFragmentBinding
 import com.finder.Suggestion
 import com.finder.networking.DetailsResponse
-import com.finder.networking.SearchResponse
-import com.finder.ui.main.SuggestionState
 import io.reactivex.disposables.CompositeDisposable
+import android.text.Spannable
+
+import android.text.style.AbsoluteSizeSpan
+
+import android.text.style.StyleSpan
+
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import androidx.core.text.bold
+
 
 private const val KEY_SUGGESTION_ID = "key.suggestion_id"
 
@@ -157,6 +166,8 @@ class DetailFragment : Fragment() {
             binding.favoriteIcon.isVisible = true
             binding.favoriteIcon.isChecked = suggestionFromDb?.isFavorite ?: false
           })
+
+          binding.recentReviews.text = "Most recent review: \n${suggestion.reviewText}"
 
       }
       is DetailState.Error -> {

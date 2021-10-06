@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="humongousTextSize">40sp</dimen>
     <dimen name="hugeTextSize">24sp</dimen>
     <dimen name="xlargeTextSize">18sp</dimen>
     <dimen name="largeTextSize">16sp</dimen>
