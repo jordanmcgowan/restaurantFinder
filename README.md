@@ -8,6 +8,7 @@ This is an app that simply queries the Google Places API based on the location o
 * The ability to favorite locations
 * A map view showcasing locations of the items on the list screen
 * Keyword search for all your favorite cuisines, like Ethiopian food!
+* Support for light and dark mode
 
 ## Running the app
 The application should run out of the box if you grab the apk from the releases tab, but if you're running this locally you'll need to ensure you add a Google API to your `local.properties` - it should look like `apiKey={your_key}`. Building and installing locally should then launch the app for you!
