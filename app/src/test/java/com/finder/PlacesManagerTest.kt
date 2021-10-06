@@ -3,14 +3,8 @@ package com.finder
 import com.finder.networking.*
 import com.finder.storage.SuggestionRepository
 import okhttp3.OkHttpClient
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import okhttp3.mockwebserver.RecordedRequest
-import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.Mockito.*
-import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import retrofit2.Call
 import retrofit2.Response
@@ -46,23 +40,23 @@ class PlacesManagerTest {
   @Test
   fun `it should GET with query`() {
 
-    val remoteApi = remoteApi(baseUrl = "http://some.api")
+    val mockApi = mockApi(baseUrl = "http://googleMock")
 
-    val givenSearchQuery = "given search phrase"
+    val suggestionId = "place1"
 
-    val call: Call<RestaurantSuggestionDetailResponse> = remoteApi.fetchRestaurantSuggestionDetails(suggestionId = givenSearchQuery)
+    val call: Call<RestaurantSuggestionDetailResponse> = mockApi.fetchRestaurantSuggestionDetails(suggestionId = suggestionId)
 
     expectThat(call.request()) {
-      assertThat("is GET method") {
+      assertThat("is GET request") {
         it.method == "GET"
       }
-      assertThat("has given search query") {
-        it.url.queryParameterValues("search") == listOf(givenSearchQuery)
+      assertThat("has suggestionId") {
+        it.url.queryParameterValues("place_id") == listOf(suggestionId)
       }
     }
   }
 
-  fun remoteApi(baseUrl: String): PlacesApi {
+  private fun mockApi(baseUrl: String): PlacesApi {
     return Retrofit.Builder()
       .client(OkHttpClient())
       .baseUrl(baseUrl)
