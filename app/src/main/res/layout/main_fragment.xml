@@ -51,6 +51,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/header_title" />
 
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/favorite_filter_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:button="@drawable/favorite_checkbox"
+            android:contentDescription="@string/favorite_button_cont_desc"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/search_view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

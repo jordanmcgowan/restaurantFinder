@@ -73,6 +73,22 @@ class MainFragment : Fragment() {
       }
     })
 
+    binding.favoriteFilterButton.setOnClickListener {
+      // When the button is enabled, we'll fetch _just_ the favorite items and show those to the
+      // user. When it's disabled, we'll flip back to the search results
+      if (binding.favoriteFilterButton.isChecked) {
+        viewModel.getCachedSuggestions().observe(viewLifecycleOwner, { suggestions ->
+          val favoriteSuggestions = suggestions.filter { it.isFavorite }
+          render(SuggestionState.Content(suggestionList = favoriteSuggestions))
+        })
+      } else {
+        // FUTURE IMPROVEMENT - We could use a cached list of items here since we're making an
+        // identical request as we did when this screen loading...
+        getSearchSuggestions(lat, long)
+      }
+    }
+
+
     binding.suggestionList.apply {
       val suggestionAdapter = SuggestionAdapter(
         actionHandler = ::handleAction
