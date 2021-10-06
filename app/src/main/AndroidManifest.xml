@@ -16,9 +16,9 @@
     <application
         android:name=".MyApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/icon_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.Finder">
 
@@ -26,8 +26,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${apiKey}" />
 
+        <!-- FUTURE IMPROVEMENT - Actually handle orientation changes instead of just ignoring -->
         <activity
             android:name=".MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

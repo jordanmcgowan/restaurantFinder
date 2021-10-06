@@ -2,21 +2,23 @@ package com.finder.ui.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.finder.BuildConfig
 import com.finder.R
 import com.finder.databinding.SuggestionItemBinding
 import com.finder.Suggestion
 
 typealias SuggestionActionHandler = (SuggestionAction) -> Unit
 
+private const val GET_IMAGE_ROOT_URL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference="
+
 class SuggestionAdapter(
   private val actionHandler: SuggestionActionHandler
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-  private var items: MutableList<Suggestion> = mutableListOf()
+  private var items: List<Suggestion> = listOf()
 
   override fun getItemCount(): Int = items.size
 
@@ -34,7 +36,10 @@ class SuggestionAdapter(
   override fun getItemViewType(position: Int) = 0
 
   fun setSuggestions(suggestions: List<Suggestion>) {
-    items.addAll(suggestions)
+    items = suggestions
+    // FUTURE IMPROVEMENT - find a better way to signal that the list has been updated that forcing
+    // the whole thing to refresh
+    notifyDataSetChanged()
   }
 }
 
@@ -44,11 +49,10 @@ class SuggestionViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
   fun bind(suggestion: Suggestion) {
-    // TODO - Text is stretching beyond the end constraint and not elipsing
     binding.name.text = suggestion.name
     Glide
       .with(binding.root.context)
-      .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${suggestion.imageReference}&key=AIzaSyDQSd210wKX_7cz9MELkxhaEOUhFP0AkSk")
+      .load("$GET_IMAGE_ROOT_URL${suggestion.imageReference}&key=${BuildConfig.apiKey}")
       .into(binding.image)
     val priceLevelText = when (suggestion.priceLevel) {
       1 -> "$"
@@ -86,8 +90,14 @@ class SuggestionViewHolder(
     // The fact this is a check box will handle updates, but not the initial state setting
     binding.favoriteIcon.isChecked = suggestion.isFavorite
 
-    // When the icon is tapped, flip the icon and tell the VM to update the favorite state
-    binding.favoriteIcon.setOnCheckedChangeListener {  _, isFavorite ->
+    binding.openStatus.apply {
+      isVisible = true
+      text = if (suggestion.openNow) context.getString(R.string.open_now) else context.getString(R.string.currently_closed)
+      setTextColor(if (suggestion.openNow) context.getColor(R.color.light_green) else context.getColor(R.color.dark_grey))
+    }
+
+    binding.favoriteIcon.setOnClickListener {
+      val isFavorite = binding.favoriteIcon.isChecked
       // Since the state of the button should reflect the current isFavorite status, when the button
       // state changes we can send that through as the new state
       actionHandler(SuggestionAction.UpdateFavoriteState(suggestion = suggestion.copy(isFavorite = isFavorite)))

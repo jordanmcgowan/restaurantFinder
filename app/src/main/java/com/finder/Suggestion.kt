@@ -2,6 +2,7 @@ package com.finder
 
 import android.os.Parcelable
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import java.io.Serializable
@@ -16,10 +17,12 @@ data class Suggestion(
   val rating: Float? = null,
   val ratingCount: Int? = null,
   val priceLevel: Int? = null,
-  // We'll give these a default as they're unused in the Suggestion List context, only within
-  // Details
+  // We'll give these location values a default as they're unused in the Suggestion List context,
+  // only within Details
   val lat: Float? = null,
   val lng: Float? = null,
+  val openNow: Boolean = false,
+  val reviewText: String? = null,
   val isFavorite: Boolean = false
 ) : Serializable
 
@@ -34,7 +37,9 @@ data class SuggestionLite(
   val placeId: String,
   val lat: Float?,
   val lng: Float?,
-  val name: String
+  val name: String,
+  val address: String?,
+  val isFavorite: Boolean
 ): Parcelable
 
 fun Suggestion.toSuggestionLite(): SuggestionLite {
@@ -42,7 +47,9 @@ fun Suggestion.toSuggestionLite(): SuggestionLite {
     placeId = placeId,
     lat = lat,
     lng = lng,
-    name = name
+    name = name,
+    address = address,
+    isFavorite = isFavorite
   )
 }
 

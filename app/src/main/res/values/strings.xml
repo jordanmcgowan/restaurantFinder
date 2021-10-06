@@ -1,13 +1,25 @@
 <resources>
-    <string name="app_name">baglessLunch</string>
+    <string name="app_name">Bagless Lunch</string>
 
     <!-- Used for Suggestion Adapter -->
     <string name="price_label_divider">|</string>
     <string name="rating_count_label">(%d)</string>
     <string name="favorite_cont_desc">favorite item</string>
     <string name="fab_cont_desc">show map</string>
+    <string name="open_now">Open now</string>
+    <string name="currently_closed">Currently closed</string>
 
     <!-- Used for Main Fragment -->
     <string name="search_hint">Search for a restaurant</string>
     <string name="header_title">AllTrails at Lunch</string>
+    <string name="error_state_cont_desc">Error state icon</string>
+    <string name="empty_state_notice">No results found</string>
+    <string name="favorite_button_cont_desc">Show favorites only</string>
+
+    <!--  Used for Map Fragment  -->
+    <string name="map_header">Suggestions for you</string>
+    <string name="map_subheader">Tap and item to view details</string>
+
+    <!--  Used for Detail Fragment  -->
+    <string name="review_prefix">Most recent reviews:\n\n%s</string>
 </resources>

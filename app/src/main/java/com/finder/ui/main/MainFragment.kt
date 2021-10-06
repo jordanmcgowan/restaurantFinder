@@ -10,11 +10,11 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.finder.databinding.MainFragmentBinding
 import com.finder.ui.detail.DetailFragment
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.Observer
+import androidx.fragment.app.commit
+import com.finder.R
+import com.finder.networking.SearchResponse
 import com.finder.toSuggestionLite
 import com.finder.ui.map.MapFragment
 
@@ -36,11 +36,11 @@ class MainFragment : Fragment() {
         }
       }
     }
+
+    const val TAG = "MainFragmentTag"
   }
 
   private lateinit var binding: MainFragmentBinding
-
-  private val compositeDisposable = CompositeDisposable()
 
   private val viewModel: MainViewModel by viewModels()
 
@@ -67,28 +67,39 @@ class MainFragment : Fragment() {
       }
 
       override fun onQueryTextSubmit(keyword: String?): Boolean {
-        viewModel.getSuggestions(lat = lat, long = long, keyword = keyword)
+        render(SuggestionState.Loading)
+        getSearchSuggestions(lat = lat, long = long, keyword = keyword)
         return true
       }
     })
 
+    binding.favoriteFilterButton.setOnClickListener {
+      // When the button is enabled, we'll fetch _just_ the favorite items and show those to the
+      // user. When it's disabled, we'll flip back to the search results
+      if (binding.favoriteFilterButton.isChecked) {
+        viewModel.getCachedSuggestions().observe(viewLifecycleOwner, { suggestions ->
+          val favoriteSuggestions = suggestions.filter { it.isFavorite }
+          render(SuggestionState.Content(suggestionList = favoriteSuggestions))
+        })
+      } else {
+        // FUTURE IMPROVEMENT - We could use a cached list of items here since we're making an
+        // identical request as we did when this screen loading...
+        getSearchSuggestions(lat, long)
+      }
+    }
 
-    compositeDisposable.add(
-      viewModel.state()
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(
-          {
-            render(it)
-          },
-          {
-            // TODO (with more time) - log this to BugSnag and alert on it
-            println("ERROR! ${it.localizedMessage}")
-          }
-        )
-    )
+
+    binding.suggestionList.apply {
+      val suggestionAdapter = SuggestionAdapter(
+        actionHandler = ::handleAction
+      )
+      adapter = suggestionAdapter
+      layoutManager = LinearLayoutManager(context)
+      isVisible = true
+    }
 
     // Get base suggestions
-    viewModel.getSuggestions(lat = lat, long = long)
+    getSearchSuggestions(lat, long)
 
   }
 
@@ -98,23 +109,37 @@ class MainFragment : Fragment() {
     (activity as AppCompatActivity?)?.supportActionBar?.hide()
   }
 
-  override fun onDestroy() {
-    super.onDestroy()
-    compositeDisposable.dispose()
+  private fun getSearchSuggestions(lat: Double?, long: Double?, keyword: String? = null) {
+    viewModel.getSuggestions(lat = lat, long = long, keyword = keyword).observe(viewLifecycleOwner, {
+      when (it) {
+        is SearchResponse.Success -> {
+          if (it.data.isEmpty()) {
+            render(SuggestionState.Empty)
+          } else {
+            render(SuggestionState.Content(suggestionList = it.data))
+          }
+        }
+        is SearchResponse.Error -> {
+          render(SuggestionState.Error(message = it.message))
+        }
+      }
+    })
   }
 
   private fun render(state: SuggestionState) {
     when (state) {
       is SuggestionState.Loading -> {
-        binding.viewFlipper.displayedChild(binding.contentContainer)
         binding.progressBar.isVisible = true
+        // Make sure the progress bar can always been seen. When we're searching for a keyword, the
+        // previous search results will be on the screen and we need to be sure the spinner can be
+        // seen
+        binding.progressBar.bringToFront()
       }
       is SuggestionState.Content -> {
         binding.progressBar.isVisible = false
         binding.searchLayout.isVisible = true
 
-        // TODO -  I think this is causing the entire adapter to rebind and lose teh scroll state...
-        viewModel.getCachedSuggestions().observe(viewLifecycleOwner, Observer { suggestions ->
+        viewModel.getCachedSuggestions().observe(viewLifecycleOwner, { suggestions ->
 
           val officialSuggestions = state.suggestionList.map { individualSuggestion ->
             val matchingSuggestion =
@@ -126,15 +151,7 @@ class MainFragment : Fragment() {
             }
           }
 
-          binding.suggestionList.apply {
-            val suggestionAdapter = SuggestionAdapter(
-              actionHandler = ::handleAction
-            )
-            suggestionAdapter.setSuggestions(officialSuggestions)
-            adapter = suggestionAdapter
-            layoutManager = LinearLayoutManager(context)
-            isVisible = true
-          }
+          (binding.suggestionList.adapter as SuggestionAdapter).setSuggestions(officialSuggestions)
 
           // Setup the FAB to pass the suggestions along to render the map view
           binding.fab.setOnClickListener {
@@ -149,13 +166,15 @@ class MainFragment : Fragment() {
         // We want to be able to search when no results are found -- otherwise this is a
         // dead end
         binding.searchLayout.isVisible = true
-        // TODO - no results view
+        binding.errorState.isVisible = true
+        binding.errorText.text = context?.getString(R.string.empty_state_notice)
       }
       is SuggestionState.Error -> {
-        // TODO - show more in this...
+        binding.progressBar.isVisible = false
         // We want to be able to search when a search fails -- otherwise this is a dead end
         binding.searchLayout.isVisible = true
-        binding.viewFlipper.displayedChild(binding.errorState)
+        binding.errorState.isVisible = true
+        binding.errorText.text = state.message
       }
     }
   }
@@ -164,30 +183,27 @@ class MainFragment : Fragment() {
   private fun handleAction(action: SuggestionAction) {
     when (action) {
       is SuggestionAction.SeeSuggestionDetails -> {
-        parentFragmentManager.beginTransaction()
-          .replace(
-            // Not super happy with this, but it's enough to get the new Fragment to
-            // open. Ideally we could use this binding's root - for some reason
-            // `binding.root.id` wasn't working for me, but this did
+        parentFragmentManager.commit {
+          // Not super happy with this, but it's enough to get the new Fragment to
+          // open. Ideally we could use this binding's root - for some reason
+          // `binding.root.id` wasn't working for me, but this did
+          replace(
             ((view as ViewGroup).parent as View).id,
-            DetailFragment.newInstance(suggestion = action.suggestion),
-            DetailFragment.TAG
+            DetailFragment.newInstance(action.suggestion)
           )
-          .addToBackStack(null)
-          .commit()
+          setReorderingAllowed(true)
+          addToBackStack(TAG)
+        }
       }
       is SuggestionAction.SeeSuggestionsOnMap -> {
-        parentFragmentManager.beginTransaction()
-          .replace(
-            // Not super happy with this, but it's enough to get the new Fragment to
-            // open. Ideally we could use this binding's root - for some reason
-            // `binding.root.id` wasn't working for me, but this did
+        parentFragmentManager.commit {
+          replace(
             ((view as ViewGroup).parent as View).id,
-            MapFragment.newInstance(suggestionList = action.suggestionList),
-            MapFragment.TAG
+            MapFragment.newInstance(action.suggestionList)
           )
-          .addToBackStack(null)
-          .commit()
+          setReorderingAllowed(true)
+          addToBackStack(TAG)
+        }
       }
       is SuggestionAction.UpdateFavoriteState -> {
         viewModel.updateFavoriteState(suggestion = action.suggestion)

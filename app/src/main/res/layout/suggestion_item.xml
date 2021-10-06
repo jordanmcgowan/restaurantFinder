@@ -24,7 +24,7 @@
 
     <TextView
         android:id="@+id/name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/image"
@@ -36,7 +36,7 @@
         android:textColor="@color/dark_grey"
         android:textSize="@dimen/largeTextSize"
         android:textStyle="bold"
-        tools:text="Jordan's Jam" />
+        tools:text="Jordan's Jam with a really long title that should ellipsize and end" />
 
     <androidx.appcompat.widget.AppCompatRatingBar
         android:id="@+id/rating"
@@ -84,13 +84,27 @@
 
     <TextView
         android:id="@+id/address"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/rating"
         app:layout_constraintStart_toEndOf="@id/priceDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:textColor="@color/dark_grey"
         android:textSize="@dimen/mediumTextSize"
-        tools:text="1234 Main St" />
+        tools:text="1234 WhatRoadIsThisLong Lane, Minneapolis Minnesota or somewhere near there most likely if I had to guess" />
+
+    <TextView
+        android:id="@+id/open_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/address"
+        app:layout_constraintStart_toEndOf="@id/image"
+        android:textSize="@dimen/mediumTextSize"
+        tools:textColor="@color/dark_grey"
+        tools:text="Currently closed" />
+
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/favorite_icon"
