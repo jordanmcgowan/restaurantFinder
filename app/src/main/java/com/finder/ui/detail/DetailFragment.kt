@@ -167,7 +167,8 @@ class DetailFragment : Fragment() {
             binding.favoriteIcon.isChecked = suggestionFromDb?.isFavorite ?: false
           })
 
-          binding.recentReviews.text = "Most recent review: \n${suggestion.reviewText}"
+        binding.recentReviews.text =
+          binding.root.context.getString(R.string.review_prefix, suggestion.reviewText)
 
       }
       is DetailState.Error -> {

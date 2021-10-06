@@ -122,9 +122,10 @@ class PlacesManager internal constructor(
       lat = suggestionResponse.geometry?.location?.latitude,
       lng = suggestionResponse.geometry?.location?.longitude,
       openNow = suggestionResponse.hoursResponse?.openNow ?: false,
-      // We'll just grab the first review, which should be the most recent to display to the user on
-      // the DetailFragment
-      reviewText = suggestionResponse.reviews?.first()?.text
+      // We'll just throw a couple review texts together -- we only need the actual text value if
+      // it's present as it's the only data we'll use. We can separate with a line break so the
+      // detail view doesn't have to parse them out
+      reviewText = suggestionResponse.reviews?.take(3)?.filter { it.text != null }?.joinToString(separator = "\n\n") { it.text!! }
     )
   }
 }
