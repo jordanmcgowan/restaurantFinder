@@ -6,6 +6,9 @@ This is an app that simply queries the Google Places API based on the location o
 * A map view showcasing locations of the items on the list screen
 * Keyword search for all your favorite cuisines, like Ethiopian food!
 
+## Running the app
+The application should run out of the box if you grab the apk from the releases tab, but if you're running this locally you'll need to ensure you add a Google API to your `local.properties` - it should look like `apiKey={your_key}`. Building and installing locally should then launch the app for you!
+
 ### Technical Specs
 `restraurantFinder` uses some of the latest and greatest Android technologies to provider the user a snappy interface and the developer an easier and cleaner implementation.
 
@@ -20,5 +23,31 @@ Beyond the standard views, the application also houses a basic `SupportMapFragme
 #### Dependency Injection
 The `PlacesManager` (the central networking class) is provided to all `ViewModels` via Dagger. The `PlacesManagerModule` will create all the necessary dependencies and open the door for any class that may need to `@Inject` them.
 
-#### Data Persistance
-One of the features within the application, favorites, is powered almost entirely by a `Room` database. Dagger provides the `Dao` to the rest of the project where a simple `Repository` allows DB interaction. The DB is keyed off of the unique `place_id` supplied by the service and allows for all screens to determine if an item is a favorite or not. User based updates are immediate and every screen should reflect the proper favorite status when properly implemented. 
+#### Data Persistence
+One of the features within the application, favorites, is powered almost entirely by a `Room` database. Dagger provides the `Dao` to the rest of the project where a simple `Repository` allows DB interaction. The DB is keyed off of the unique `place_id` supplied by the service and allows for all screens to determine if an item is a favorite or not. User based updates are immediate and every screen should reflect the proper favorite status when properly implemented.
+
+#### Dev Tools
+[Flipper](https://github.com/facebook/flipper) had been a part of the bundle until 10/6 when I started to experience the issue found [here](https://github.com/facebook/flipper/issues/2213). If you would like to try it out on your own, simply add these dependencies to the app's `build.gradle`:
+```
+    //Flipper
+    debugImplementation 'com.facebook.flipper:flipper:0.113.0'
+    debugImplementation 'com.facebook.soloader:soloader:0.10.1'
+    releaseImplementation 'com.facebook.flipper:flipper-noop:0.113.0'
+```
+
+and these within `onCreate()` in `MyApp.kt`: 
+```kotlin
+        SoLoader.init(this, false)
+
+        if (BuildConfig.DEBUG && FlipperUtils.shouldEnableFlipper(this)) {
+            val client = AndroidFlipperClient.getInstance(this)
+            val descriptorMapping = DescriptorMapping.withDefaults()
+            client.addPlugin(InspectorFlipperPlugin(this, descriptorMapping))
+            client.addPlugin(DatabasesFlipperPlugin(this))
+
+            client.start()
+        }
+```
+
+#### Known Issues
+* At times, tapping the Favorite icon within `MainFragment` is taking the action to show just the favorites in the list. Debugging has proven fruitless...
