@@ -76,8 +76,7 @@ class MainActivity : AppCompatActivity() {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    // permission was granted, yay! Do the
-                    // location-related task you need to do.
+                    // Permission granted, launch the app
                     if (ContextCompat.checkSelfPermission(
                             this,
                             Manifest.permission.ACCESS_FINE_LOCATION
@@ -88,13 +87,9 @@ class MainActivity : AppCompatActivity() {
 
                 } else {
 
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show()
-                    // TODO - use the app with a random location?
-
+                    Toast.makeText(this, "This app needs your location in order to operate. A random location will be chosen to demonstrate the app's ability!", Toast.LENGTH_LONG).show()
                     // Check if we are in a state where the user has denied the permission and
-                    // selected Don't ask again
+                    // selected "Don't ask again"
                     if (!ActivityCompat.shouldShowRequestPermissionRationale(
                             this,
                             Manifest.permission.ACCESS_FINE_LOCATION
@@ -106,6 +101,13 @@ class MainActivity : AppCompatActivity() {
                                 Uri.fromParts("package", this.packageName, null),
                             ),
                         )
+                    } else {
+                        // If the user denied location permissions, we'll show them suggestions in
+                        // the great city of St Paul, MN
+                        launchMainFragment(
+                            lat = 44.9537,
+                            long = -93.0900
+                        )
                     }
                 }
                 return
@@ -116,14 +118,28 @@ class MainActivity : AppCompatActivity() {
     // This is isolated to a method since it's duplicated. Both call sites are protected by a
     // permission check at the time of writing, hence the supression
     @SuppressLint("MissingPermission")
-    private fun launchMainFragment() {
-        (fusedLocationProvider as FusedLocationProviderClient).lastLocation.addOnSuccessListener {
+    private fun launchMainFragment(
+        lat: Double? = null,
+        long: Double? = null
+    ) {
+        // When we're got hardcoded lat/long values, we'll try and launch the app with those
+        // straight away
+        if (lat != null && long != null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, MainFragment.newInstance(
-                    lat = it.latitude,
-                    long = it.longitude
+                    lat = lat,
+                    long = long
                 ))
                 .commitNow()
+        } else {
+            (fusedLocationProvider as FusedLocationProviderClient).lastLocation.addOnSuccessListener {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, MainFragment.newInstance(
+                        lat = it.latitude,
+                        long = it.longitude
+                    ))
+                    .commitNow()
+            }
         }
     }
 
