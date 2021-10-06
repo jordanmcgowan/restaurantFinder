@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">baglessLunch</string>
+    <string name="app_name">Bagless Lunch</string>
 
     <!-- Used for Suggestion Adapter -->
     <string name="price_label_divider">|</string>
