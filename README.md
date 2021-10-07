@@ -63,5 +63,5 @@ and these within `onCreate()` in `MyApp.kt`:
 ```
 
 ## Known Issues
+The ongoing list of actionable Issues can be found [here](https://github.com/jordanmcgowan/restaurantFinder/issues). Small bugs will be listed below
 * At times, tapping the Favorite icon within `MainFragment` is taking the action to show just the favorites in the list. Debugging has proven fruitless...
-* State management on the List/Detail screen is not restored appropriately. Instead I updated the Manifest to simply ignore config changes. This is likely a simple enough fix (calling `onSaveInstanceState` and handling the Bundle changes) but it's not something that is currently supported
