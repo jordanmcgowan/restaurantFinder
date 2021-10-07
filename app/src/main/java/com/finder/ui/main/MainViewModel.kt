@@ -1,5 +1,6 @@
 package com.finder.ui.main
 
+import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +12,7 @@ import com.finder.networking.SearchResponse
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 class MainViewModel : ViewModel() {
@@ -53,15 +55,11 @@ class MainViewModel : ViewModel() {
     }
 }
 
-sealed class SuggestionState {
-    object Loading: SuggestionState()
-    data class Content(
-        val suggestionList: List<Suggestion>
-    ): SuggestionState()
-    object Empty: SuggestionState()
-    data class Error(
-        val message: String
-    ): SuggestionState()
+sealed class SuggestionState: Parcelable {
+    @Parcelize object Loading: SuggestionState()
+    @Parcelize data class Content(val suggestionList: List<Suggestion>): SuggestionState()
+    @Parcelize object Empty: SuggestionState()
+    @Parcelize data class Error(val message: String): SuggestionState()
 }
 
 sealed class SuggestionAction {

@@ -9,26 +9,48 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
+import android.os.PersistableBundle
 import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.finder.ui.main.MainFragment
 import com.google.android.gms.location.*
 
+const val FRAGMENT_KEY = "key_fragment_state"
+
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var fragment: Fragment
 
     private var fusedLocationProvider: FusedLocationProviderClient? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+
+        if (savedInstanceState != null) {
+            //Restore the fragment's instance
+            val savedFragment = supportFragmentManager.getFragment(savedInstanceState, FRAGMENT_KEY)
+            if (savedFragment != null) {
+                fragment = savedFragment
+            }
+        }
+
         this.supportActionBar?.hide()
 
         fusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
 
         checkLocationPermission()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+
+        // Save the fragment's instance
+        supportFragmentManager.putFragment(outState, FRAGMENT_KEY, fragment)
     }
 
     private fun checkLocationPermission() {
@@ -62,7 +84,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun requestLocationPermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,), MY_PERMISSIONS_REQUEST_LOCATION)
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), MY_PERMISSIONS_REQUEST_LOCATION)
     }
 
     override fun onRequestPermissionsResult(
