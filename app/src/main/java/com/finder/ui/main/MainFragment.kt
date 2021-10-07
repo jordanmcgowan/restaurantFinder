@@ -1,21 +1,21 @@
 package com.finder.ui.main
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.finder.databinding.MainFragmentBinding
-import com.finder.ui.detail.DetailFragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.finder.R
+import com.finder.databinding.MainFragmentBinding
 import com.finder.networking.SearchResponse
 import com.finder.toSuggestionLite
+import com.finder.ui.detail.DetailFragment
 import com.finder.ui.map.MapFragment
 
 private const val LAT_PARAM = "lat_bundle_param"
@@ -189,7 +189,8 @@ class MainFragment : Fragment() {
           // `binding.root.id` wasn't working for me, but this did
           replace(
             ((view as ViewGroup).parent as View).id,
-            DetailFragment.newInstance(action.suggestion)
+            DetailFragment.newInstance(action.suggestion),
+            DetailFragment.TAG
           )
           setReorderingAllowed(true)
           addToBackStack(TAG)
@@ -199,7 +200,8 @@ class MainFragment : Fragment() {
         parentFragmentManager.commit {
           replace(
             ((view as ViewGroup).parent as View).id,
-            MapFragment.newInstance(action.suggestionList)
+            MapFragment.newInstance(action.suggestionList),
+            MapFragment.TAG
           )
           setReorderingAllowed(true)
           addToBackStack(TAG)
@@ -211,11 +213,4 @@ class MainFragment : Fragment() {
     }
   }
 
-}
-
-infix fun ViewGroup.displayedChild(view: View?) {
-  for (index in 0 until childCount) {
-    val child = getChildAt(index)
-    child.isVisible = child === view
-  }
 }

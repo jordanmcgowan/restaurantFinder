@@ -22,4 +22,5 @@
 
     <!--  Used for Detail Fragment  -->
     <string name="review_prefix">Most recent reviews:\n\n%s</string>
+    <string name="image_cont_desc">Suggestion image</string>
 </resources>

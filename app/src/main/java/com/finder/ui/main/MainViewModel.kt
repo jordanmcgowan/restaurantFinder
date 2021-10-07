@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.finder.MyApp
-import com.finder.networking.PlacesManager
 import com.finder.Suggestion
 import com.finder.SuggestionLite
+import com.finder.networking.PlacesManager
 import com.finder.networking.SearchResponse
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject

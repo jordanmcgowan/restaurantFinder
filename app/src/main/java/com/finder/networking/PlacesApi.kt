@@ -1,9 +1,9 @@
 package com.finder.networking
 
 import com.finder.BuildConfig
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
-import retrofit2.Call
 
 interface PlacesApi {
     @GET("nearbysearch/json?radius=5000&type=restaurant")
