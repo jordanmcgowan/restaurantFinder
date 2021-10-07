@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
+@Parcelize
 @Entity(tableName = "suggestions")
 data class Suggestion(
   @PrimaryKey(autoGenerate = false)
@@ -24,7 +25,7 @@ data class Suggestion(
   val openNow: Boolean = false,
   val reviewText: String? = null,
   val isFavorite: Boolean = false
-) : Serializable
+) : Parcelable
 
 
 // A slimmed down version of the original object that we can pass through Fragment bundles.

@@ -20,9 +20,11 @@ import com.finder.ui.map.MapFragment
 
 private const val LAT_PARAM = "lat_bundle_param"
 private const val LONG_PARAM = "long_bundle_param"
-
+private const val KEY_SUGGESTION_STATE = "key.suggestion_state"
 
 class MainFragment : Fragment() {
+
+  lateinit var suggestionStateOnlyToBeUsedForSavedInstanceState: SuggestionState
 
   companion object {
     fun newInstance(
@@ -88,7 +90,6 @@ class MainFragment : Fragment() {
       }
     }
 
-
     binding.suggestionList.apply {
       val suggestionAdapter = SuggestionAdapter(
         actionHandler = ::handleAction
@@ -98,9 +99,23 @@ class MainFragment : Fragment() {
       isVisible = true
     }
 
-    // Get base suggestions
-    getSearchSuggestions(lat, long)
+    if (savedInstanceState != null) {
+      val savedState = savedInstanceState.getParcelable<SuggestionState>(KEY_SUGGESTION_STATE)
+      if (savedState != null) {
+        render(savedState)
+      } else {
+        getSearchSuggestions(lat, long)
+      }
+    } else {
+      // Get base suggestions
+      getSearchSuggestions(lat, long)
+    }
 
+  }
+
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    outState.putParcelable(KEY_SUGGESTION_STATE, suggestionStateOnlyToBeUsedForSavedInstanceState)
   }
 
   override fun onResume() {
@@ -127,6 +142,7 @@ class MainFragment : Fragment() {
   }
 
   private fun render(state: SuggestionState) {
+    suggestionStateOnlyToBeUsedForSavedInstanceState = state
     when (state) {
       is SuggestionState.Loading -> {
         binding.progressBar.isVisible = true
@@ -183,17 +199,21 @@ class MainFragment : Fragment() {
   private fun handleAction(action: SuggestionAction) {
     when (action) {
       is SuggestionAction.SeeSuggestionDetails -> {
-        parentFragmentManager.commit {
-          // Not super happy with this, but it's enough to get the new Fragment to
-          // open. Ideally we could use this binding's root - for some reason
-          // `binding.root.id` wasn't working for me, but this did
-          replace(
-            ((view as ViewGroup).parent as View).id,
-            DetailFragment.newInstance(action.suggestion)
-          )
-          setReorderingAllowed(true)
-          addToBackStack(TAG)
-        }
+//        parentFragmentManager.commit {
+//          // Not super happy with this, but it's enough to get the new Fragment to
+//          // open. Ideally we could use this binding's root - for some reason
+//          // `binding.root.id` wasn't working for me, but this did
+//          replace(
+//            ((view as ViewGroup).parent as View).id,
+//            DetailFragment.newInstance(action.suggestion)
+//          )
+//          setReorderingAllowed(true)
+//          addToBackStack(TAG)
+//        }
+
+        parentFragmentManager.beginTransaction()
+          .replace(((view as ViewGroup).parent as View).id, DetailFragment.newInstance(action.suggestion))
+          .commitNowAllowingStateLoss()
       }
       is SuggestionAction.SeeSuggestionsOnMap -> {
         parentFragmentManager.commit {
