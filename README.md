@@ -11,7 +11,16 @@ This is an app that simply queries the Google Places API based on the location o
 * Support for light and dark mode
 
 ## Running the app
-The application should run out of the box if you grab the apk from the releases tab, but if you're running this locally you'll need to ensure you add a Google API to your `local.properties` - it should look like `apiKey={your_key}`. Building and installing locally should then launch the app for you!
+### Locally
+If you wish to run the app locally you'll need to take a couple steps. 
+* Clone/Fork the repo
+* [Obtain a Google API key](https://developers.google.com/maps/documentation/android-sdk/get-api-key)
+* Add your Google API key to the root level `local.properties` file
+  * It should follow the pattern `apiKey={your_key}`
+* Build and install the application to your device
+
+### APK installation
+The application should run out of the box if you grab the apk from the [releases tab](https://github.com/jordanmcgowan/restaurantFinder/releases). Be sure to grab the release you care most about. The release may not be production ready but should be tagged as such.
 
 ### Technical Specs
 `restraurantFinder` uses some of the latest and greatest Android technologies to provider the user a snappy interface and the developer an easier and cleaner implementation.
