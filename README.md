@@ -22,24 +22,24 @@ If you wish to run the app locally you'll need to take a couple steps.
 ### APK installation
 The application should run out of the box if you grab the apk from the [releases tab](https://github.com/jordanmcgowan/restaurantFinder/releases). Be sure to grab the release you care most about. The release may not be production ready but should be tagged as such.
 
-### Technical Specs
+## Technical Specs
 `restraurantFinder` uses some of the latest and greatest Android technologies to provider the user a snappy interface and the developer an easier and cleaner implementation.
 
-#### Networking
+### Networking
 API calls are made with the help of OkHttp3 and Retrofit2. Successful requests are parsed by Moshi and pushed through to consumers via `LiveData`.
 
-#### Views
+### Views
 The app is built on a standard MVVM template with the VM passing `LiveData` through to a Fragment's `viewLifecycleOwner` that subsequently update views with the data received. `State` and `Action` sealed classes handle the operations of the experience. In the case of `MainFragment`, we have a `RecyclerView` powered by the `SuggestionAdapter`. The Adapter can communicate with the Fragment via a type-aliased ActionHandler.
 
 Beyond the standard views, the application also houses a basic `SupportMapFragment`. A lightweight model object is passed through the `Bundle` to allow the `MapFragment` to avoid any network calls. "Custom" map marker listeners allow the user to navigate to the `DetailFragment`
 
-#### Dependency Injection
+### Dependency Injection
 The `PlacesManager` (the central networking class) is provided to all `ViewModels` via Dagger. The `PlacesManagerModule` will create all the necessary dependencies and open the door for any class that may need to `@Inject` them.
 
-#### Data Persistence
+### Data Persistence
 One of the features within the application, favorites, is powered almost entirely by a `Room` database. Dagger provides the `Dao` to the rest of the project where a simple `Repository` allows DB interaction. The DB is keyed off of the unique `place_id` supplied by the service and allows for all screens to determine if an item is a favorite or not. User based updates are immediate and every screen should reflect the proper favorite status when properly implemented.
 
-#### Dev Tools
+### Dev Tools
 [Flipper](https://github.com/facebook/flipper) had been a part of the bundle until 10/6 when I started to experience the issue found [here](https://github.com/facebook/flipper/issues/2213). If you would like to try it out on your own, simply add these dependencies to the app's `build.gradle`:
 ```
     //Flipper
@@ -62,6 +62,6 @@ and these within `onCreate()` in `MyApp.kt`:
         }
 ```
 
-#### Known Issues
+## Known Issues
 * At times, tapping the Favorite icon within `MainFragment` is taking the action to show just the favorites in the list. Debugging has proven fruitless...
 * State management on the List/Detail screen is not restored appropriately. Instead I updated the Manifest to simply ignore config changes. This is likely a simple enough fix (calling `onSaveInstanceState` and handling the Bundle changes) but it's not something that is currently supported
