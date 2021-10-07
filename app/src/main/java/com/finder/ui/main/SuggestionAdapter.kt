@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.finder.BuildConfig
 import com.finder.R
-import com.finder.databinding.SuggestionItemBinding
 import com.finder.Suggestion
+import com.finder.databinding.SuggestionItemBinding
 
 typealias SuggestionActionHandler = (SuggestionAction) -> Unit
 
